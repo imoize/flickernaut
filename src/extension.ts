@@ -11,6 +11,19 @@ export default class Flickernaut extends Extension {
         ];
     }
 
+    /*
+    Need to restart Nautilus to load or unload the Nautilus extension
+    Nautilus will close when extension is disabled or enabled
+    */
+    _restartNautilus() {
+        try {
+            const cmd = 'nautilus -q';
+            GLib.spawn_command_line_async(cmd);
+        }
+        catch (e) {
+        }
+    }
+
     enable() {
         const packageDir = this.dir.get_path();
         const targetDir = `${packageDir}/Flickernaut`;
@@ -19,7 +32,7 @@ export default class Flickernaut extends Extension {
         const fileManagers = this.getFileManagers();
 
         /*
-        Symlink nautilus extension script to Flickernaut extension directory,
+        Symlink Nautilus extension script to Flickernaut extension directory,
         so it can be enabled or disabled by extension manager
         */
         for (const [dir, name] of fileManagers) {
@@ -41,13 +54,14 @@ export default class Flickernaut extends Extension {
             catch (e) {
             }
         }
+        this._restartNautilus();
     }
 
     disable() {
         const fileManagers = this.getFileManagers();
 
         /*
-        Remove symlinks from nautilus extensions folder,
+        Remove symlinks from Nautilus extensions folder,
         to prevent script loaded when extension is disabled
         */
         for (const [dir, name] of fileManagers) {
@@ -62,5 +76,6 @@ export default class Flickernaut extends Extension {
             catch (e) {
             }
         }
+        this._restartNautilus();
     }
 }
