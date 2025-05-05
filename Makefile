@@ -17,8 +17,8 @@ schemas/gschemas.compiled: schemas/org.gnome.shell.extensions.$(NAME).gschema.xm
 dist: dist/extension.js dist/prefs.js schemas/gschemas.compiled
 	@cp -r schemas dist/
 	@cp metadata.json dist/
-	@cp -r src/Flickernaut dist/
-	@cp src/nautilus-flickernaut.py dist/
+	@cp -r nautilus-extension/Flickernaut dist/
+	@cp nautilus-extension/nautilus-flickernaut.py dist/
 
 $(NAME).zip: dist
 	@(cd dist && zip ../$(NAME).zip -9r .)
@@ -32,4 +32,5 @@ install: $(NAME).zip
 
 clean:
 	@rm -rf dist $(NAME).zip
+	@rm -rf schemas/gschemas.compiled
 	@rm -rf ~/.local/share/gnome-shell/extensions/$(NAME)@$(DOMAIN)
