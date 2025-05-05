@@ -19,7 +19,7 @@ export default class Flickernaut extends Extension {
         const fileManagers = this.getFileManagers();
 
         /*
-        Symlink nautilus extensions to Flickernaut extension directory,
+        Symlink nautilus extension script to Flickernaut extension directory,
         so it can be enabled or disabled by extension manager
         */
         for (const [dir, name] of fileManagers) {
@@ -44,6 +44,23 @@ export default class Flickernaut extends Extension {
     }
 
     disable() {
+        const fileManagers = this.getFileManagers();
 
+        /*
+        Remove symlinks from nautilus extensions folder,
+        to prevent script loaded when extension is disabled
+        */
+        for (const [dir, name] of fileManagers) {
+            try {
+                const destDir = GLib.build_filenamev([dir, name]);
+                const destFile = Gio.File.new_for_path(destDir);
+
+                if (destFile.query_exists(null)) {
+                    GLib.unlink(destDir);
+                }
+            }
+            catch (e) {
+            }
+        }
     }
 }
