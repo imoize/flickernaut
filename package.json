@@ -1,0 +1,34 @@
+{
+    "name": "flickernaut",
+    "type": "module",
+    "version": "1.0.0",
+    "private": true,
+    "description": "An extension that adds quick-launch to Nautilus context menu entries",
+    "author": "Brilliant Nurzaman",
+    "license": "GPL-3.0-or-later",
+    "homepage": "https://github.com/imoize/flickernaut#readme",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/imoize/flickernaut.git"
+    },
+    "bugs": {
+        "url": "https://github.com/imoize/flickernaut/issues"
+    },
+    "sideEffects": false,
+    "scripts": {
+        "lint": "eslint .",
+        "lint:fix": "eslint --fix .",
+        "typecheck": "tsc --strict --noEmit"
+    },
+    "dependencies": {
+        "@girs/gjs": "4.0.0-beta.23",
+        "@girs/gnome-shell": "^48.0.2"
+    },
+    "devDependencies": {
+        "@antfu/eslint-config": "^4.12.0",
+        "eslint": "^9.26.0",
+        "eslint-plugin-format": "^1.0.1",
+        "eslint-plugin-jsdoc": "^50.6.11",
+        "typescript": "^5.8.3"
+    }
+}
