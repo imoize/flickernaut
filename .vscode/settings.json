@@ -1,0 +1,62 @@
+{
+    "search.exclude": {
+        "**/node_modules": true,
+        "**/.vscode": true
+    },
+    "search.useGlobalIgnoreFiles": true,
+    "search.useParentIgnoreFiles": true,
+    "editor.trimAutoWhitespace": true,
+    "files.trimTrailingWhitespace": true,
+    "editor.tabSize": 4,
+
+    "prettier.enable": false,
+    "editor.formatOnSave": false,
+
+    "editor.codeActionsOnSave": {
+        "source.fixAll.eslint": "explicit",
+        "source.organizeImports": "never"
+    },
+
+    "eslint.rules.customizations": [
+        { "rule": "style/*", "severity": "off", "fixable": true },
+        { "rule": "format/*", "severity": "off", "fixable": true },
+        { "rule": "*-indent", "severity": "off", "fixable": true },
+        { "rule": "*-spacing", "severity": "off", "fixable": true },
+        { "rule": "*-spaces", "severity": "off", "fixable": true },
+        { "rule": "*-order", "severity": "off", "fixable": true },
+        { "rule": "*-dangle", "severity": "off", "fixable": true },
+        { "rule": "*-newline", "severity": "off", "fixable": true },
+        { "rule": "*quotes", "severity": "off", "fixable": true },
+        { "rule": "*semi", "severity": "off", "fixable": true }
+    ],
+
+    "eslint.validate": [
+        "javascript",
+        "typescript",
+        "markdown",
+        "json",
+        "json5",
+        "jsonc",
+        "yaml",
+        "toml",
+        "xml",
+        "css"
+    ],
+
+    "[typescript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[javascript]": {
+        "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+    },
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.black-formatter",
+        "editor.formatOnSave": true
+    },
+    "[xml]": {
+        "editor.defaultFormatter": "redhat.vscode-xml",
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2
+    },
+    "xml.format.maxLineWidth": 0
+}
