@@ -21,6 +21,7 @@ export default class Flickernaut extends Extension {
             GLib.spawn_command_line_async(cmd);
         }
         catch (e) {
+            log(`Error restarting Nautilus: ${e}`);
         }
     }
 
@@ -49,9 +50,13 @@ export default class Flickernaut extends Extension {
                     if (sourceFile.query_exists(null)) {
                         destFile.make_symbolic_link(source, null);
                     }
+                    else {
+                        log(`Source file/directory not found: ${source}`);
+                    }
                 }
             }
             catch (e) {
+                log(`Error creating symlink for ${name}: ${e}`);
             }
         }
         this._restartNautilus();
@@ -72,8 +77,12 @@ export default class Flickernaut extends Extension {
                 if (destFile.query_exists(null)) {
                     GLib.unlink(destDir);
                 }
+                else {
+                    log(`Symlink not found: ${destDir}`);
+                }
             }
             catch (e) {
+                log(`Error removing symlink for ${name}: ${e}`);
             }
         }
         this._restartNautilus();
