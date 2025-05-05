@@ -1,0 +1,11 @@
+{
+    "name": "Flickernaut",
+    "description": "An extension that adds quick-launch to Nautilus context menu entries",
+    "uuid": "flickernaut@imoize.github.io",
+    "url": "https://github.com/imoize/flickernaut",
+    "settings-schema": "org.gnome.shell.extensions.flickernaut",
+    "session-modes": ["user", "unlock-dialog"],
+    "shell-version": [
+        "48"
+    ]
+}
