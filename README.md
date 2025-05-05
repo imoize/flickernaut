@@ -1,2 +1,3 @@
-# quick-ide
-Quickly open folder to IDE in GNOME Files context menu.
+# GNOME Shell Extension - Flickernaut
+
+A GNOME extension that adds quick-launch to Nautilus context menu entries for your installed dev tools, IDEs, and custom apps.
