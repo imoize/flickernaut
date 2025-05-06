@@ -1,6 +1,7 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
+import { restartNautilus } from './lib/nautilus.js';
 
 export default class Flickernaut extends Extension {
     private getFileManagers(): [string, string][] {
@@ -9,20 +10,6 @@ export default class Flickernaut extends Extension {
             [`${dataDir}/nautilus-python/extensions`, 'nautilus-flickernaut.py'],
             [`${dataDir}/nautilus-python/extensions`, 'Flickernaut'],
         ];
-    }
-
-    /*
-    Need to restart Nautilus to load or unload the Nautilus extension
-    Nautilus will close when extension is disabled or enabled
-    */
-    _restartNautilus() {
-        try {
-            const cmd = 'nautilus -q';
-            GLib.spawn_command_line_async(cmd);
-        }
-        catch (e) {
-            log(`Error restarting Nautilus: ${e}`);
-        }
     }
 
     enable() {
@@ -59,7 +46,11 @@ export default class Flickernaut extends Extension {
                 log(`Error creating symlink for ${name}: ${e}`);
             }
         }
-        this._restartNautilus();
+        /*
+        Need to restart Nautilus to load or unload the Nautilus extension
+        Nautilus will close when extension is disabled or enabled
+        */
+        restartNautilus();
     }
 
     disable() {
@@ -85,6 +76,10 @@ export default class Flickernaut extends Extension {
                 log(`Error removing symlink for ${name}: ${e}`);
             }
         }
-        this._restartNautilus();
+        /*
+        Need to restart Nautilus to load or unload the Nautilus extension
+        Nautilus will close when extension is disabled or enabled
+        */
+        restartNautilus();
     }
 }
