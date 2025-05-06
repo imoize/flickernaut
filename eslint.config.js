@@ -36,5 +36,6 @@ export default antfu({
             },
         ],
         '@typescript-eslint/explicit-function-return-type': 'off',
+        'no-console': 'off',
     },
 });
