@@ -1,4 +1,4 @@
-from typing import List, Optional
+from typing import Optional
 from gi.repository import Nautilus, GObject
 from Flickernaut.manager import configured_programs
 
@@ -6,12 +6,12 @@ from Flickernaut.manager import configured_programs
 class FlickernautExtension(GObject.Object, Nautilus.MenuProvider):
     """Nautilus extension providing IDE/editor or other apps context menu integration."""
 
-    def __init__(self):
+    def __init__(self) -> None:
         super().__init__()
 
     def _get_items(
-        self, folder, *, id_prefix: str = "", is_file: bool = False
-    ) -> List[Nautilus.MenuItem]:
+        self, folder: Nautilus.FileInfo, *, id_prefix: str = "", is_file: bool = False
+    ) -> list[Nautilus.MenuItem]:
         """Generate menu items for the given folder/file.
 
         Args:
@@ -27,12 +27,12 @@ class FlickernautExtension(GObject.Object, Nautilus.MenuProvider):
             folder_path, id_prefix=id_prefix, is_file=is_file
         )
 
-    def get_background_items(self, *args) -> List[Nautilus.MenuItem]:
+    def get_background_items(self, *args) -> list[Nautilus.MenuItem]:
         """Generate menu items for background (directory) clicks."""
         current_folder = args[-1]
         return self._get_items(current_folder)
 
-    def get_file_items(self, *args) -> Optional[List[Nautilus.MenuItem]]:
+    def get_file_items(self, *args) -> Optional[list[Nautilus.MenuItem]]:
         """Generate menu items for file selections.
 
         Returns:
