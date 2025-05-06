@@ -6,14 +6,78 @@
       <description>Editor App</description>
       <default>
         [
-        '{"enable": false, "id": "android-studio", "name": "Android Studio", "native": ["studio"], "flatpak": ["com.google.AndroidStudio"], "arguments": [], "supports_files": false}',
-        '{"enable": true, "id": "goland", "name": "Goland", "native": ["goland"], "flatpak": ["com.jetbrains.GoLand"], "arguments": [], "supports_files": true}',
-        '{"enable": true, "id": "rustrover", "name": "RustRover", "native": ["rustrover"], "flatpak": [], "arguments": [], "supports_files": true}',
-        '{"enable": false, "id": "sublime", "name": "Sublime", "native": ["subl"], "flatpak": ["com.sublimetext.three"]}',
-        '{"enable": true, "id": "vscode", "name": "VSCode", "native": ["code"], "flatpak": ["com.visualstudio.code"], "arguments": [], "supports_files": true}',
-        '{"enable": true, "id": "webstorm", "name": "Webstorm", "native": ["webstorm"], "flatpak": ["com.jetbrains.WebStorm"], "arguments": [], "supports_files": true}',
-        '{"enable": false, "id": "windsurf", "name": "Windsurf", "native": ["windsurf"], "flatpak": [], "arguments": [], "supports_files": true}',
-        '{"enable": false, "id": "zed", "name": "Zed", "native": ["zed"], "flatpak": ["dev.zed.Zed"], "arguments": [], "supports_files": true}'
+        '{
+        "id": 1,
+        "name": "Android Studio",
+        "native": ["studio"],
+        "flatpak": ["com.google.AndroidStudio"],
+        "arguments": [],
+        "supports_files": false,
+        "enable": false
+        }',
+        '{
+        "id": 2,
+        "name": "Goland",
+        "native": ["goland"],
+        "flatpak": ["com.jetbrains.GoLand"],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 3,
+        "name": "RustRover",
+        "native": ["rustrover"],
+        "flatpak": [],
+        "arguments": [],
+        "supports_files": true,
+        "enable": true
+        }',
+        '{
+        "id": 4,
+        "name": "Sublime",
+        "native": ["subl"],
+        "flatpak": ["com.sublimetext.three"],
+        "arguments": [],
+        "supports_files": false,
+        "enable": false
+        }',
+        '{
+        "id": 5,
+        "name": "VSCode",
+        "native": ["code"],
+        "flatpak": ["com.visualstudio.code"],
+        "arguments": [],
+        "supports_files": true,
+        "enable": true
+        }',
+        '{
+        "id": 6,
+        "name": "Webstorm",
+        "native": ["webstorm"],
+        "flatpak": ["com.jetbrains.WebStorm"],
+        "arguments": [],
+        "supports_files": true,
+        "enable": true
+        }',
+        '{
+        "id": 7,
+        "name": "Windsurf",
+        "native": ["windsurf"],
+        "flatpak": [],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 8,
+        "name": "Zed",
+        "native": ["zed"],
+        "flatpak": ["dev.zed.Zed"],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }'
         ]
       </default>
     </key>
