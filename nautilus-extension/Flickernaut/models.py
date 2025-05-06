@@ -127,13 +127,13 @@ class Flatpak(Package):
 class Program:
     def __init__(
         self,
-        id: str,
+        id: int,
         name: str,
         *packages: Package,
         arguments: Optional[list[str]] = None,
         supports_files: bool = False,
     ) -> None:
-        self.id: str = id
+        self.id: int = id
         self.name: str = name
         self.arguments: list[str] = arguments or []
         self.supports_files: bool = supports_files
@@ -175,7 +175,7 @@ class ProgramRegistry(ProgramDict):
                     label += f" ({pkg.type_name})"
 
                 item = Nautilus.MenuItem.new(
-                    name=f"{id_prefix}{program.id}", label=label
+                    name=f"{id_prefix}program-{program.id}", label=label
                 )
 
                 item.connect(

@@ -68,7 +68,7 @@ class ProgramConfigLoader:
                     continue
 
                 program = Program(
-                    entry["id"],
+                    int(entry["id"]),
                     entry["name"],
                     *ProgramConfigLoader._create_packages(entry),
                     arguments=entry.get("arguments", []),
