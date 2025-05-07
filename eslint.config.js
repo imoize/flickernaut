@@ -15,9 +15,7 @@ export default antfu({
     },
     ignores: [
         'build/**/*',
-        'dist/**/*',
         'node_modules/**',
-        // ...globs
     ],
     plugins: {
         jsdoc,
@@ -37,5 +35,6 @@ export default antfu({
         ],
         '@typescript-eslint/explicit-function-return-type': 'off',
         'no-console': 'off',
+        'yml/indent': ['error', 2, { indentBlockSequences: true }],
     },
 });
