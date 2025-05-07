@@ -17,6 +17,24 @@
         }',
         '{
         "id": 2,
+        "name": "Clion",
+        "native": ["clion"],
+        "flatpak": ["com.jetbrains.CLion"],
+        "arguments": [],
+        "supports_files": false,
+        "enable": false
+        }',
+        '{
+        "id": 3,
+        "name": "Clion (EAP)",
+        "native": ["clion-eap"],
+        "flatpak": [],
+        "arguments": [],
+        "supports_files": false,
+        "enable": false
+        }',
+        '{
+        "id": 4,
         "name": "Goland",
         "native": ["goland"],
         "flatpak": ["com.jetbrains.GoLand"],
@@ -25,16 +43,61 @@
         "enable": false
         }',
         '{
-        "id": 3,
+        "id": 5,
+        "name": "Goland (EAP)",
+        "native": ["goland-eap"],
+        "flatpak": [],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 6,
+        "name": "IntelliJ IDEA",
+        "native": ["idea"],
+        "flatpak": [],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 7,
+        "name": "IntelliJ IDEA (EAP)",
+        "native": ["idea-eap"],
+        "flatpak": [],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 8,
+        "name": "IntelliJ IDEA CE",
+        "native": [],
+        "flatpak": ["com.jetbrains.IntelliJ-IDEA-Community"],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 9,
+        "name": "IntelliJ IDEA Ultimate",
+        "native": [],
+        "flatpak": ["com.jetbrains.IntelliJ-IDEA-Ultimate"],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 10,
         "name": "RustRover",
         "native": ["rustrover"],
         "flatpak": [],
         "arguments": [],
         "supports_files": true,
-        "enable": true
+        "enable": false
         }',
         '{
-        "id": 4,
+        "id": 11,
         "name": "Sublime",
         "native": ["subl"],
         "flatpak": ["com.sublimetext.three"],
@@ -43,7 +106,7 @@
         "enable": false
         }',
         '{
-        "id": 5,
+        "id": 12,
         "name": "VSCode",
         "native": ["code"],
         "flatpak": ["com.visualstudio.code"],
@@ -52,7 +115,25 @@
         "enable": true
         }',
         '{
-        "id": 6,
+        "id": 13,
+        "name": "VSCode (Insiders)",
+        "native": ["code-insiders"],
+        "flatpak": ["com.visualstudio.code.insiders"],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 14,
+        "name": "VSCodium",
+        "native": ["vscodium", "codium"],
+        "flatpak": ["com.vscodium.codium"],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 15,
         "name": "Webstorm",
         "native": ["webstorm"],
         "flatpak": ["com.jetbrains.WebStorm"],
@@ -61,7 +142,16 @@
         "enable": true
         }',
         '{
-        "id": 7,
+        "id": 16,
+        "name": "Webstorm (EAP)",
+        "native": ["webstorm-eap"],
+        "flatpak": [],
+        "arguments": [],
+        "supports_files": true,
+        "enable": false
+        }',
+        '{
+        "id": 17,
         "name": "Windsurf",
         "native": ["windsurf"],
         "flatpak": [],
@@ -70,13 +160,13 @@
         "enable": false
         }',
         '{
-        "id": 8,
+        "id": 18,
         "name": "Zed",
         "native": ["zed"],
         "flatpak": ["dev.zed.Zed"],
         "arguments": [],
         "supports_files": true,
-        "enable": false
+        "enable": true
         }'
         ]
       </default>
