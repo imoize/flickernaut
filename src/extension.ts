@@ -37,12 +37,12 @@ export default class Flickernaut extends Extension {
                         destFile.make_symbolic_link(source, null);
                     }
                     else {
-                        console.log(`Source file/directory not found: ${source}`);
+                        console.warn(`Source file/directory not found: ${source}`);
                     }
                 }
             }
             catch (e) {
-                console.log(`Error creating symlink for ${name}: ${e}`);
+                console.error(`Error creating symlink for ${name}: ${e}`);
             }
         }
     }
@@ -63,11 +63,11 @@ export default class Flickernaut extends Extension {
                     GLib.unlink(destDir);
                 }
                 else {
-                    console.log(`Symlink not found: ${destDir}`);
+                    console.warn(`Symlink not found: ${destDir}`);
                 }
             }
             catch (e) {
-                console.log(`Error removing symlink for ${name}: ${e}`);
+                console.error(`Error removing symlink for ${name}: ${e}`);
             }
         }
     }
