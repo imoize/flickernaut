@@ -2,7 +2,10 @@ NAME = flickernaut
 UUID = $(NAME)@imoize.github.io
 
 BLP_FILES := $(shell find resources/ui -name '*.blp')
-UI_FILES := $(patsubst resources/ui/%.blp,dist/ui/%.ui,$(BLP_FILES))
+UI_FILES := $(patsubst resources/ui/%.blp,src/ui/%.ui,$(BLP_FILES))
+
+UI_SRC := $(shell find src/ui -name '*.ui')
+UI_DST := $(patsubst src/ui/%,dist/ui/%,$(UI_SRC))
 
 .PHONY: all build build-ui pack install test test-shell remove clean
 
@@ -17,7 +20,7 @@ build: node_modules
 
 build-ui: $(UI_FILES)
 
-$(UI_FILES): dist/ui/%.ui: resources/ui/%.blp
+$(UI_FILES): src/ui/%.ui: resources/ui/%.blp
 	@mkdir -p $(dir $@)
 	@echo "Compiling Blueprint: $< → $@"
 	@blueprint-compiler compile $< --output $@
@@ -25,8 +28,13 @@ $(UI_FILES): dist/ui/%.ui: resources/ui/%.blp
 schemas/gschemas.compiled: schemas/org.gnome.shell.extensions.${NAME}.gschema.xml
 	glib-compile-schemas schemas
 
+copy-ui: $(UI_DST)
 
-pack: build schemas/gschemas.compiled
+$(UI_DST): dist/ui/%: src/ui/%
+	@mkdir -p $(dir $@)
+	@cp $< $@
+
+pack: build schemas/gschemas.compiled copy-ui
 	@cp metadata.json dist/
 	@cp -r schemas dist/
 	@cp -r nautilus-extension/* dist/
