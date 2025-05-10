@@ -16,7 +16,7 @@
     },
     "sideEffects": false,
     "scripts": {
-        "build": "npx tsc",
+        "build": "make all",
         "lint": "eslint .",
         "lint:fix": "eslint --fix .",
         "typecheck": "tsc --strict --noEmit"

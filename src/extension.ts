@@ -1,10 +1,9 @@
 import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import { Extension } from 'resource:///org/gnome/shell/extensions/extension.js';
-import { restartNautilus } from './lib/nautilus.js';
 
 export default class Flickernaut extends Extension {
-    private getFileManagers(): [string, string][] {
+    private getNautilusExtensionPath(): [string, string][] {
         const dataDir = GLib.get_user_data_dir();
         return [
             [`${dataDir}/nautilus-python/extensions`, 'nautilus-flickernaut.py'],
@@ -17,13 +16,13 @@ export default class Flickernaut extends Extension {
         const targetDir = `${packageDir}/Flickernaut`;
         const targetFile = `${packageDir}/nautilus-flickernaut.py`;
 
-        const fileManagers = this.getFileManagers();
+        const nautilusExtensionPath = this.getNautilusExtensionPath();
 
         /*
         Symlink Nautilus extension script to Flickernaut extension directory,
         so it can be enabled or disabled by extension manager
         */
-        for (const [dir, name] of fileManagers) {
+        for (const [dir, name] of nautilusExtensionPath) {
             const destDir = GLib.build_filenamev([dir, name]);
             const destFile = Gio.File.new_for_path(destDir);
 
@@ -38,29 +37,24 @@ export default class Flickernaut extends Extension {
                         destFile.make_symbolic_link(source, null);
                     }
                     else {
-                        log(`Source file/directory not found: ${source}`);
+                        console.warn(`Source file/directory not found: ${source}`);
                     }
                 }
             }
             catch (e) {
-                log(`Error creating symlink for ${name}: ${e}`);
+                console.error(`Error creating symlink for ${name}: ${e}`);
             }
         }
-        /*
-        Need to restart Nautilus to load or unload the Nautilus extension
-        Nautilus will close when extension is disabled or enabled
-        */
-        restartNautilus();
     }
 
     disable() {
-        const fileManagers = this.getFileManagers();
+        const nautilusExtensionPath = this.getNautilusExtensionPath();
 
         /*
         Remove symlinks from Nautilus extensions folder,
         to prevent script loaded when extension is disabled
         */
-        for (const [dir, name] of fileManagers) {
+        for (const [dir, name] of nautilusExtensionPath) {
             try {
                 const destDir = GLib.build_filenamev([dir, name]);
                 const destFile = Gio.File.new_for_path(destDir);
@@ -69,17 +63,12 @@ export default class Flickernaut extends Extension {
                     GLib.unlink(destDir);
                 }
                 else {
-                    log(`Symlink not found: ${destDir}`);
+                    console.warn(`Symlink not found: ${destDir}`);
                 }
             }
             catch (e) {
-                log(`Error removing symlink for ${name}: ${e}`);
+                console.error(`Error removing symlink for ${name}: ${e}`);
             }
         }
-        /*
-        Need to restart Nautilus to load or unload the Nautilus extension
-        Nautilus will close when extension is disabled or enabled
-        */
-        restartNautilus();
     }
 }
