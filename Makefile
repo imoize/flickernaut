@@ -1,36 +1,62 @@
-NAME=flickernaut
-DOMAIN=imoize.github.io
+NAME = flickernaut
+UUID = $(NAME)@imoize.github.io
 
-.PHONY: all pack install clean
+BLP_FILES := $(shell find resources/ui -name '*.blp')
+UI_FILES := $(patsubst resources/ui/%.blp,src/ui/%.ui,$(BLP_FILES))
 
-all: dist/extension.js
+UI_SRC := $(shell find src/ui -name '*.ui')
+UI_DST := $(patsubst src/ui/%,dist/ui/%,$(UI_SRC))
+
+.PHONY: all build build-ui pack install test test-shell remove clean
+
+all: pack
 
 node_modules: package.json
 	npm install
 
-dist/extension.js dist/prefs.js: node_modules
+build: node_modules
 	tsc
+	@$(MAKE) build-ui
 
-schemas/gschemas.compiled: schemas/org.gnome.shell.extensions.$(NAME).gschema.xml
+build-ui: $(UI_FILES)
+
+$(UI_FILES): src/ui/%.ui: resources/ui/%.blp
+	@mkdir -p $(dir $@)
+	@echo "Compiling Blueprint: $< → $@"
+	@blueprint-compiler compile $< --output $@
+
+schemas/gschemas.compiled: schemas/org.gnome.shell.extensions.${NAME}.gschema.xml
 	glib-compile-schemas schemas
 
-dist: dist/extension.js dist/prefs.js schemas/gschemas.compiled
-	@cp -r schemas dist/
+copy-ui: $(UI_DST)
+
+$(UI_DST): dist/ui/%: src/ui/%
+	@mkdir -p $(dir $@)
+	@cp $< $@
+
+pack: build schemas/gschemas.compiled copy-ui
 	@cp metadata.json dist/
-	@cp -r nautilus-extension/Flickernaut dist/
-	@cp nautilus-extension/nautilus-flickernaut.py dist/
+	@cp -r schemas dist/
+	@cp -r nautilus-extension/* dist/
+	@(cd dist && zip ../$(UUID).shell-extension.zip -9r .)
 
-$(NAME).zip: dist
-	@(cd dist && zip ../$(NAME).zip -9r .)
+install: pack
+	gnome-extensions install -f $(UUID).shell-extension.zip
 
-pack: $(NAME).zip
+test: pack
+	@rm -rf $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
+	@cp -r dist $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
+	gnome-extensions prefs $(UUID)
 
-install: $(NAME).zip
-	@touch ~/.local/share/gnome-shell/extensions/$(NAME)@$(DOMAIN)
-	@rm -rf ~/.local/share/gnome-shell/extensions/$(NAME)@$(DOMAIN)
-	@mv dist ~/.local/share/gnome-shell/extensions/$(NAME)@$(DOMAIN)
+test-shell:
+	@env GNOME_SHELL_SLOWDOWN_FACTOR=2 \
+		MUTTER_DEBUG_DUMMY_MODE_SPECS=1500x1000 \
+		MUTTER_DEBUG_DUMMY_MONITOR_SCALES=1 \
+		dbus-run-session -- gnome-shell --nested --wayland
+
+remove:
+	@rm -rf $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 
 clean:
-	@rm -rf dist $(NAME).zip
+	@rm -rf dist $(UUID).shell-extension.zip
 	@rm -rf schemas/gschemas.compiled
-	@rm -rf ~/.local/share/gnome-shell/extensions/$(NAME)@$(DOMAIN)

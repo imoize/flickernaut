@@ -14,7 +14,7 @@ export default antfu({
         css: true,
     },
     ignores: [
-        'build/**/*',
+        'dist/**/*',
         'node_modules/**',
     ],
     plugins: {
