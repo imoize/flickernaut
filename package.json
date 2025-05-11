@@ -26,10 +26,10 @@
         "@girs/gnome-shell": "^48.0.2"
     },
     "devDependencies": {
-        "@antfu/eslint-config": "^4.12.0",
+        "@antfu/eslint-config": "^4.13.0",
         "eslint": "^9.26.0",
         "eslint-plugin-format": "^1.0.1",
-        "eslint-plugin-jsdoc": "^50.6.11",
+        "eslint-plugin-jsdoc": "^50.6.14",
         "typescript": "^5.8.3"
     }
 }
