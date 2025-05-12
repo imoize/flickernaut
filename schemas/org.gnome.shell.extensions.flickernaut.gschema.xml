@@ -21,7 +21,7 @@
         }',
         '{
         "id": 2,
-        "name": "Clion",
+        "name": "CLion",
         "native": ["clion"],
         "flatpak": ["com.jetbrains.CLion"],
         "arguments": [],
@@ -30,7 +30,7 @@
         }',
         '{
         "id": 3,
-        "name": "Clion (EAP)",
+        "name": "CLion (EAP)",
         "native": ["clion-eap"],
         "flatpak": [],
         "arguments": [],
