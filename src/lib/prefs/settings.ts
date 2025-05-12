@@ -2,18 +2,28 @@ import type Gio from 'gi://Gio';
 import type { Editor } from '../../../@types/types.js';
 
 /**
- * Global settings object for managing application preferences.
+ * Raw GSettings object for direct manipulation.
  */
 // eslint-disable-next-line import/no-mutable-exports
 export let settings: Gio.Settings;
 
 /**
- * Initializes the global settings object.
+ * Initializes the GSettings object.
  *
- * @param gSettings - A `Gio.Settings` instance to be used as the global settings object.
+ * @param gSettings - A `Gio.Settings` to initialize the settings with.
  */
 export function initSettings(gSettings: Gio.Settings): void {
     settings = gSettings;
+}
+
+/**
+ * Uninitializes the settings object by setting it to null.
+ *
+ * This allows the {@link settings} object to be garbage collected and should be called
+ * when the settings are no longer needed, such as during extension disable or cleanup.
+ */
+export function uninitSettings() {
+    (settings as Gio.Settings | null) = null;
 }
 
 /**

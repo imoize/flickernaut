@@ -29,9 +29,8 @@ export class EditorListClass extends Adw.ExpanderRow {
         });
 
         this._entryName.connect('changed', () => {
-            const input = this._entryName;
-
-            if (settings && 'name' && typeof editor.id === 'number') {
+            if (settings && typeof editor.id === 'number') {
+                const input = this._entryName;
                 const val = input.text;
                 const result = validate(val, editor.id, 'name');
 
@@ -46,8 +45,10 @@ export class EditorListClass extends Adw.ExpanderRow {
                     );
                     return;
                 }
+
                 input.remove_css_class('error');
                 input.set_tooltip_text(null);
+
                 this._updateConfig();
             }
         });
@@ -58,9 +59,8 @@ export class EditorListClass extends Adw.ExpanderRow {
         });
 
         this._entryNative.connect('changed', () => {
-            const input = this._entryNative;
-
-            if (settings && 'native' && typeof editor.id === 'number') {
+            if (settings && typeof editor.id === 'number') {
+                const input = this._entryNative;
                 const val = input.text;
                 const result = validate(val, editor.id, 'native');
 
@@ -84,9 +84,8 @@ export class EditorListClass extends Adw.ExpanderRow {
         });
 
         this._entryFlatpak.connect('changed', () => {
-            const input = this._entryFlatpak;
-
-            if (settings && 'flatpak' && typeof editor.id === 'number') {
+            if (settings && typeof editor.id === 'number') {
+                const input = this._entryFlatpak;
                 const val = input.text;
                 const result = validate(val, editor.id, 'flatpak');
 

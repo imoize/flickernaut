@@ -5,9 +5,8 @@
     "url": "https://github.com/imoize/flickernaut",
     "settings-schema": "org.gnome.shell.extensions.flickernaut",
     "gettext-domain": "flickernaut@imoize.github.io",
-    "session-modes": ["user"],
     "shell-version": [
         "48"
     ],
-    "version": 2
+    "version": 3
 }
