@@ -4,7 +4,6 @@
     "uuid": "flickernaut@imoize.github.io",
     "url": "https://github.com/imoize/flickernaut",
     "settings-schema": "org.gnome.shell.extensions.flickernaut",
-    "session-modes": ["user"],
     "shell-version": [
         "48"
     ],
