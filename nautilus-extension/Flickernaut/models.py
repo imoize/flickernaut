@@ -121,7 +121,7 @@ class Flatpak(Package):
 
     @property
     def type_name(self) -> str:
-        return _("Flatpak")
+        return "Flatpak"
 
 
 class Program:
