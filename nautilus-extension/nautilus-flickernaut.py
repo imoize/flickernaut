@@ -1,6 +1,29 @@
+import os.path
+import gettext
 from typing import Optional
-from gi.repository import Nautilus, GObject
+from gi.repository import Nautilus, GObject, GLib
 from Flickernaut.manager import configured_programs
+
+# Init gettext translations
+LOCALE_DIR = os.path.join(
+    GLib.get_user_data_dir(),
+    "gnome-shell",
+    "extensions",
+    "flickernaut@imoize.github.io",
+    "locale",
+)
+
+if not os.path.exists(LOCALE_DIR):
+    LOCALE_DIR = None
+
+try:
+    gettext.bindtextdomain("flickernaut@imoize.github.io", LOCALE_DIR)
+    gettext.textdomain("flickernaut@imoize.github.io")
+    _ = gettext.gettext
+
+except Exception as e:
+    print(f"Flickernaut: gettext init failed: {e}")
+    _ = lambda s: s
 
 
 class FlickernautExtension(GObject.Object, Nautilus.MenuProvider):

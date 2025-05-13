@@ -16,6 +16,13 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Install Gettext
+        uses: awalsh128/cache-apt-pkgs-action@latest
+        with:
+          packages: gettext
+          version: 1.0
+          execute_install_scripts: true
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
