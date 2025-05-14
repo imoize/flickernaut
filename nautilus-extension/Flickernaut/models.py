@@ -170,7 +170,12 @@ class ProgramRegistry(ProgramDict):
 
             for pkg in installed:
                 show_type = len(installed) > 1 and pkg.type_name
-                label = _("Open in %s") % program.name
+
+                if is_file:
+                    label = _("Open with %s") % program.name
+                else:
+                    label = _("Open in %s") % program.name
+
                 if show_type:
                     label += f" ({pkg.type_name})"
 
