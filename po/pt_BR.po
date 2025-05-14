@@ -8,67 +8,70 @@ msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-12 21:42+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-05-14 03:52+0000\n"
+"Last-Translator: Matheus <cybercountry@proton.me>\n"
+"Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
+"flickernaut/flickernaut/pt_BR/>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n > 1;\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: src/ui/pages/general.ui:11
 msgid "General"
-msgstr ""
+msgstr "Geral"
 
 #: src/ui/pages/general.ui:14
 msgid "Needs to Restart Nautilus"
-msgstr ""
+msgstr "É preciso reiniciar o Nautilus"
 
 #: src/ui/pages/general.ui:19
 msgid "Editor"
-msgstr ""
+msgstr "Editor"
 
 #: nautilus-extension/Flickernaut/models.py:31
 msgid "Unknown"
-msgstr ""
+msgstr "Desconhecido"
 
 #: nautilus-extension/Flickernaut/models.py:173
 #, python-format
 msgid "Open in %s"
-msgstr ""
+msgstr "Abrir em %s"
 
 #: src/prefs/editors.ts:27
 msgid "Name"
-msgstr ""
+msgstr "Nome"
 
 #: src/prefs/editors.ts:41
 msgid "Name cannot be empty"
-msgstr ""
+msgstr "Nome não pode estar vazio"
 
 #: src/prefs/editors.ts:43
 msgid "Name already exists"
-msgstr ""
+msgstr "O nome já existe"
 
 #: src/prefs/editors.ts:57
 msgid "Native Cmd"
-msgstr ""
+msgstr "Comando nativo"
 
 #: src/prefs/editors.ts:70
 msgid "Native command already exists"
-msgstr ""
+msgstr "Comando nativo já está em uso"
 
 #: src/prefs/editors.ts:82
 msgid "Flatpak ID"
-msgstr ""
+msgstr "Flatpak ID"
 
 #: src/prefs/editors.ts:95
 msgid "Flatpak ID already exists"
-msgstr ""
+msgstr "Flatpak ID já está em uso"
 
 #: src/prefs/editors.ts:107
 msgid "Arguments"
-msgstr ""
+msgstr "Argumentos"
 
 #: src/prefs/editors.ts:116
 msgid "Support File"
-msgstr ""
+msgstr "Suporte a arquivo"
