@@ -22,7 +22,7 @@ Install the extension from source:
 
 ```bash
 git clone https://github.com/imoize/flickernaut
-cd blur-my-shell
+cd flickernaut
 make install
 ```
 
