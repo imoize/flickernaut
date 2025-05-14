@@ -1,5 +1,7 @@
 # GNOME Shell Extension - Flickernaut
 
+[<img src="assets/get_it_on_gnome_extensions.png" height="70">](https://extensions.gnome.org/extension/8101/flickernaut/)
+
 A GNOME extension that adds custom entry to Nautilus context menu for your installed dev tools, IDEs, and custom apps.
 
 <p align="center">
@@ -16,7 +18,7 @@ You can help to translate the extension into your language, either by directly o
 
 ### Development
 
-This extension is developed using **TypeScript**. Make sure you have Node.js, npm and tsc installed to build the TypeScript sources.
+This extension is developed using **TypeScript** and **Python** for Nautilus part. Make sure you have Node.js, npm and tsc installed to build the TypeScript sources.
 
 Install the extension from source:
 
