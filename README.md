@@ -40,12 +40,12 @@ To see extension log:
 
 ```bash
 # for logs in the extension's preferences
-journalctl /usr/bin/gjs
+journalctl -o cat -f /usr/bin/gjs
 # or
 journalctl /usr/bin/gjs | grep flickernaut
 
 # for logs in nautilus
-journalctl /usr/bin/nautilus
+journalctl -o cat -f /usr/bin/nautilus
 # or
 journalctl /usr/bin/nautilus | grep flickernaut
 ```

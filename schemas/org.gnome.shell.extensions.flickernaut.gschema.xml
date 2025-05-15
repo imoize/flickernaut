@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schemalist>
   <schema id="org.gnome.shell.extensions.flickernaut" path="/org/gnome/shell/extensions/flickernaut/">
-    <key type="i" name="settings-version">
+    <key name="settings-version" type="i">
       <summary>The version of the settings to update from.</summary>
       <default>1</default>
     </key>

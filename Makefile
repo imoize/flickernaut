@@ -7,7 +7,7 @@ UI_FILES := $(patsubst resources/ui/%.blp,src/ui/%.ui,$(BLP_FILES))
 UI_SRC := $(shell find src/ui -name '*.ui')
 UI_DST := $(patsubst src/ui/%,dist/ui/%,$(UI_SRC))
 
-.PHONY: all build build-ui pot pack install test test-shell remove clean
+.PHONY: all build build-ui pot pot-merge mo pack install test test-shell remove clean
 
 all: pack
 
@@ -54,11 +54,13 @@ pot:
 		--join-existing \
 		src/**/*.ts
 
+pot-merge:
 	@echo "Merging translations into existing PO files..."
 	@for file in po/*.po; do \
 		msgmerge -q -U --backup=off $$file po/${UUID}.pot; \
 	done;
 
+mo:
 	@echo "Compiling PO files into MO files..."
 	@for file in po/*.po; do \
 		locale=$$(basename $$file .po); \
@@ -67,7 +69,7 @@ pot:
 		msgfmt -o $$dir/${UUID}.mo $$file; \
 	done;
 
-pack: build schemas/gschemas.compiled copy-ui pot
+pack: build schemas/gschemas.compiled copy-ui mo
 	@cp metadata.json dist/
 	@cp -r schemas dist/
 	@cp -r nautilus-extension/* dist/
