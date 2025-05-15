@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-12 21:42+0700\n"
+"POT-Creation-Date: 2025-05-15 06:53+0700\n"
 "PO-Revision-Date: 2025-05-15 00:08+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -35,7 +35,12 @@ msgstr ""
 msgid "Unknown"
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:173
+#: nautilus-extension/Flickernaut/models.py:175
+#, python-format
+msgid "Open with %s"
+msgstr ""
+
+#: nautilus-extension/Flickernaut/models.py:177
 #, python-format
 msgid "Open in %s"
 msgstr ""
