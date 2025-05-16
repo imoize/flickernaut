@@ -8,71 +8,77 @@ msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-15 06:53+0700\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2025-05-17 10:02+0000\n"
+"Last-Translator: Pascal Dietrich <pascal.1.dietrich@hotmail.com>\n"
+"Language-Team: German <https://hosted.weblate.org/projects/flickernaut/"
+"flickernaut/de/>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 5.12-dev\n"
 
 #: src/ui/pages/general.ui:11
 msgid "General"
-msgstr ""
+msgstr "Allgemein"
 
 #: src/ui/pages/general.ui:14
 msgid "Needs to Restart Nautilus"
-msgstr ""
+msgstr "Erfordert den Neustart von Nautilus"
 
 #: src/ui/pages/general.ui:19
 msgid "Editor"
-msgstr ""
+msgstr "“"
 
 #: nautilus-extension/Flickernaut/models.py:31
+#, fuzzy
 msgid "Unknown"
-msgstr ""
+msgstr "Unbekannt"
 
 #: nautilus-extension/Flickernaut/models.py:175
 #, python-format
 msgid "Open with %s"
-msgstr ""
+msgstr "Öffnen mit %s"
 
 #: nautilus-extension/Flickernaut/models.py:177
 #, python-format
 msgid "Open in %s"
-msgstr ""
+msgstr "Öffnen in %s"
 
 #: src/prefs/editors.ts:27
 msgid "Name"
-msgstr ""
+msgstr "Name"
 
 #: src/prefs/editors.ts:41
 msgid "Name cannot be empty"
-msgstr ""
+msgstr "Der Name kann nicht leer sein"
 
 #: src/prefs/editors.ts:43
 msgid "Name already exists"
-msgstr ""
+msgstr "Der Name existiert bereits"
 
 #: src/prefs/editors.ts:57
+#, fuzzy
 msgid "Native Cmd"
-msgstr ""
+msgstr "Befehl"
 
 #: src/prefs/editors.ts:70
+#, fuzzy
 msgid "Native command already exists"
-msgstr ""
+msgstr "Der Befehl existiert bereits"
 
 #: src/prefs/editors.ts:82
 msgid "Flatpak ID"
-msgstr ""
+msgstr "Flatpak-ID"
 
 #: src/prefs/editors.ts:95
 msgid "Flatpak ID already exists"
-msgstr ""
+msgstr "Die Flatpak-ID existiert bereits"
 
 #: src/prefs/editors.ts:107
 msgid "Arguments"
-msgstr ""
+msgstr "Argumente"
 
 #: src/prefs/editors.ts:116
 msgid "Support File"
