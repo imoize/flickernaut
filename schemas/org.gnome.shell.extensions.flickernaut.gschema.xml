@@ -5,6 +5,10 @@
       <summary>The version of the settings to update from.</summary>
       <default>1</default>
     </key>
+    <key name="submenu" type="b">
+      <summary>Group entry in submenu.</summary>
+      <default>false</default>
+    </key>
     <key name="editors" type="as">
       <summary>Editor App</summary>
       <description>Editor App</description>

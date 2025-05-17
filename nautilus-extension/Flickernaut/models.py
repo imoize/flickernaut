@@ -158,8 +158,14 @@ class ProgramRegistry(ProgramDict):
         GLib.spawn_close_pid(pid)
 
     def get_menu_items(
-        self, path: str, *, id_prefix: str = "", is_file: bool = False
+        self,
+        path: str,
+        *,
+        id_prefix: str = "",
+        is_file: bool = False,
+        use_submenu: bool = False,
     ) -> list[Nautilus.MenuItem]:
+
         items: list[Nautilus.MenuItem] = []
 
         for program in self:
@@ -190,6 +196,20 @@ class ProgramRegistry(ProgramDict):
                 )
 
                 items.append(item)
+
+        if use_submenu and items:
+            submenu = Nautilus.Menu()
+
+            for item in items:
+                submenu.append_item(item)
+
+            label = _("Open In...") if not is_file else _("Open With...")
+
+            submenu_item = Nautilus.MenuItem.new(id_prefix + "submenu", label)
+
+            submenu_item.set_submenu(submenu)
+
+            return [submenu_item]
 
         return items
 
