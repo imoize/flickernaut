@@ -58,8 +58,6 @@ export function getSettings<K extends SchemaKey>(key: K): SchemaType[K] {
  * @param value - The value to set the preference to.
  */
 export function setSettings<K extends SchemaKey>(key: K, value: SchemaType[K]) {
-    console.log(`Settings pref: ${key}, ${value}`);
-
     const variant = new GLib.Variant(SchemaVariant[key], value);
 
     settings.set_value(key, variant);
