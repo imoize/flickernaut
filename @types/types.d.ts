@@ -1,3 +1,9 @@
+export interface SchemaType {
+    'settings-version': number;
+    'submenu': boolean;
+    'editors': string[];
+}
+
 export interface Editor {
     id: number;
     name: string;
