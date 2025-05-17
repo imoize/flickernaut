@@ -1,5 +1,5 @@
 import type Gio from 'gi://Gio';
-import type { Editor, SchemaType } from '../../../@types/types.js';
+import type { Application, SchemaType } from '../../../@types/types.js';
 import GLib from 'gi://GLib';
 import { showBanners } from '../../ui/widgets/banner.js';
 
@@ -70,28 +70,28 @@ export function setSettings<K extends SchemaKey>(key: K, value: SchemaType[K]) {
  *
  * @returns An array of `Application` objects parsed from the settings.
  */
-export function getAppSettings(): Editor[] {
+export function getAppSettings(): Application[] {
     return getSettings('editors')
         .map((json) => {
             try {
-                return JSON.parse(json) as Editor;
+                return JSON.parse(json) as Application;
             }
             catch {
                 return null;
             }
         })
-        .filter((e): e is Editor => e !== null);
+        .filter((e): e is Application => e !== null);
 }
 
 /**
  * Updates the settings with a new or modified application configuration.
  *
- * @param newSettings - The new or updated `Application` configuration to be saved.
+ * @param newAppSettings - The new or updated `Application` configuration to be saved.
  */
-export function setAppSettings(newSettings: Editor): void {
+export function setAppSettings(newAppSettings: Application): void {
     const configs = getAppSettings();
     const newConfigs = configs.map(e =>
-        e.id === newSettings.id ? newSettings : e,
+        e.id === newAppSettings.id ? newAppSettings : e,
     );
 
     setSettings('editors', newConfigs.map(e => JSON.stringify(e)));

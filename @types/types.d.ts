@@ -4,7 +4,7 @@ export interface SchemaType {
     'editors': string[];
 }
 
-export interface Editor {
+export interface Application {
     id: number;
     name: string;
     enable?: boolean;
