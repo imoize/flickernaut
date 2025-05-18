@@ -18,8 +18,8 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
         <property name="title" translatable="yes">Behavior</property>
         <child>
           <object class="AdwSwitchRow" id="submenu">
-            <property name="title" translatable="yes">Submenu</property>
-            <property name="subtitle" translatable="yes">Group entry in submenu.</property>
+            <property name="title" translatable="yes">Group In Submenu</property>
+            <property name="subtitle" translatable="yes">Whether to group entries in a submenu.</property>
           </object>
         </child>
       </object>
