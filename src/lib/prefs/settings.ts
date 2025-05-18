@@ -1,7 +1,7 @@
 import type Gio from 'gi://Gio';
 import type { Application, SchemaType } from '../../../@types/types.js';
 import GLib from 'gi://GLib';
-import { showBanners } from '../../ui/widgets/banner.js';
+import { bannerManager } from '../../ui/widgets/banner.js';
 
 /**
  * All existing schema keys.
@@ -62,7 +62,7 @@ export function setSettings<K extends SchemaKey>(key: K, value: SchemaType[K]) {
 
     settings.set_value(key, variant);
 
-    showBanners();
+    bannerManager.showAll();
 }
 
 /**

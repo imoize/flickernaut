@@ -2,7 +2,7 @@ import Adw from 'gi://Adw';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import { getSettings, setSettings } from '../lib/prefs/settings.js';
-import { registerBanner } from '../ui/widgets/banner.js';
+import { bannerManager } from '../ui/widgets/banner.js';
 
 export const GeneralPage = GObject.registerClass(
     {
@@ -27,7 +27,7 @@ export const GeneralPage = GObject.registerClass(
         constructor() {
             super();
 
-            registerBanner(this._banner);
+            bannerManager.register(this._banner);
 
             const state = getSettings('submenu').valueOf();
 
