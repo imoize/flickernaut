@@ -9,6 +9,11 @@ A GNOME extension that adds custom entry to Nautilus context menu for your insta
     <img src="assets/preview2.png" alt="Flickernaut Preview" style="width: 49%;" />
 </p>
 
+<p align="center">
+    <img src="assets/preview3.png" alt="Flickernaut Preview" style="width: 49%;" />
+    <img src="assets/preview4.png" alt="Flickernaut Preview" style="width: 49%;" />
+</p>
+
 ## Participate
 
 ### Translations
