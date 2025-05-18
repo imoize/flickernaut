@@ -4,6 +4,8 @@
 
 A GNOME extension that adds custom entry to Nautilus context menu for your installed dev tools, IDEs, and custom apps.
 
+## Screenshots
+
 <p align="center">
     <img src="assets/preview2.png" alt="Flickernaut Preview" style="width: 55%;" />
 </p>
@@ -13,6 +15,28 @@ A GNOME extension that adds custom entry to Nautilus context menu for your insta
     <img src="assets/preview3.png" alt="Flickernaut Preview" style="width: 30%;" />
     <img src="assets/preview4.png" alt="Flickernaut Preview" style="width: 30%;" />
 </p>
+
+## Requirements
+
+ To use this extension, you need to install the `nautilus-python` package. This package acts as an extension and providing Python bindings for Nautilus. Below are the installation instructions for various Linux distributions:
+
+### Fedora
+```bash
+sudo dnf install nautilus-python
+```
+
+### Ubuntu and Debian-based Distributions
+```bash
+sudo apt install nautilus-python
+```
+
+### Arch Linux
+```bash
+sudo pacman -Sy nautilus-python
+```
+
+> [!NOTE]
+> After making changes in the extension preferences, you need to restart Nautilus for the changes to take effect. For more details, [see here](https://gitlab.gnome.org/GNOME/nautilus-python#issues).
 
 ## Participate
 
