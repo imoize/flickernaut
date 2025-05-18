@@ -4,9 +4,10 @@
 
 A GNOME extension that adds custom entry to Nautilus context menu for your installed dev tools, IDEs, and custom apps.
 
-<p align="center">
-    <img src="assets/preview1.png" alt="Flickernaut Preview" width="50%" />
-</p>
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between;">
+    <img src="assets/preview1.png" alt="Flickernaut Preview" style="max-width: 50%;" />
+    <img src="assets/preview2.png" alt="Flickernaut Preview" style="max-width: 50%;" />
+</div>
 
 ## Participate
 
