@@ -1,6 +1,11 @@
 # GNOME Shell Extension - Flickernaut
 
-[<img src="assets/get_it_on_gnome_extensions.png" height="70">](https://extensions.gnome.org/extension/8101/flickernaut/)
+[<img src="assets/get_it_on_gnome_extensions.png" height="65" align="center">](https://extensions.gnome.org/extension/8101/flickernaut/)
+![GitHub](https://img.shields.io/github/license/imoize/flickernaut)
+[![Weblate project translated](https://hosted.weblate.org/widgets/flickernaut/-/flickernaut/svg-badge.svg)](https://hosted.weblate.org/engage/flickernaut/)
+![GitHub issues](https://img.shields.io/github/issues/imoize/flickernaut)
+![GitHub last commit](https://img.shields.io/github/last-commit/imoize/flickernaut)
+![GitHub stars](https://img.shields.io/github/stars/imoize/flickernaut)
 
 A GNOME extension that adds custom entry to Nautilus context menu for your installed dev tools, IDEs, and custom apps.
 
@@ -69,7 +74,7 @@ make test-shell
 To see extension log:
 
 ```bash
-# for logs in the extension's preferences
+# for logs in extension's preferences
 journalctl -o cat -f /usr/bin/gjs
 # or
 journalctl /usr/bin/gjs | grep flickernaut
