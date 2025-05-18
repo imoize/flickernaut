@@ -112,7 +112,7 @@ class Flatpak(Package):
 
     @property
     def is_installed(self) -> bool:
-        if not self._flatpak_path:
+        if not self._flatpak_path or not self.app_id.strip():
             return False
         return any(
             os.path.exists(os.path.join(bin_dir, self.app_id))
@@ -175,6 +175,9 @@ class ProgramRegistry(ProgramDict):
             installed = program.installed_packages
 
             for pkg in installed:
+                if not pkg.is_installed:
+                    continue
+
                 show_type = len(installed) > 1 and pkg.type_name
 
                 if is_file:
