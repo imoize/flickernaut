@@ -13,7 +13,9 @@ class BannerManager {
      * @param banner The Adw.Banner instance to register.
      */
     register(banner: Adw.Banner): void {
-        this.banners.push(banner);
+        if (!this.banners.includes(banner)) {
+            this.banners.push(banner);
+        }
     }
 
     /**
@@ -26,11 +28,8 @@ class BannerManager {
             banner.tooltip_text = _('Nautilus will be closed and restarted after clicking this button.');
             banner.revealed = true;
 
-            // Disconnect previous handler if any
-            if ((banner as any)._restartHandlerId) {
-                banner.disconnect((banner as any)._restartHandlerId);
-                delete (banner as any)._restartHandlerId;
-            }
+            this._disconnectRestartHandler(banner);
+
             (banner as any)._restartHandlerId = banner.connect('button-clicked', this._restart.bind(this));
         }
     }
@@ -40,12 +39,20 @@ class BannerManager {
      */
     cleanup(): void {
         for (const banner of this.banners) {
-            if ((banner as any)._restartHandlerId) {
-                banner.disconnect((banner as any)._restartHandlerId);
-                delete (banner as any)._restartHandlerId;
-            }
+            this._disconnectRestartHandler(banner);
         }
         this.banners.length = 0;
+    }
+
+    /**
+     * Disconnect and clean up the restart handler from a banner.
+     * @param banner The Adw.Banner instance.
+     */
+    private _disconnectRestartHandler(banner: Adw.Banner): void {
+        if ((banner as any)._restartHandlerId) {
+            banner.disconnect((banner as any)._restartHandlerId);
+            delete (banner as any)._restartHandlerId;
+        }
     }
 
     /**
@@ -58,10 +65,8 @@ class BannerManager {
 
         for (const banner of this.banners) {
             banner.revealed = false;
-            if ((banner as any)._restartHandlerId) {
-                banner.disconnect((banner as any)._restartHandlerId);
-                delete (banner as any)._restartHandlerId;
-            }
+
+            this._disconnectRestartHandler(banner);
         }
     }
 }
