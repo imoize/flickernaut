@@ -5,6 +5,10 @@
     "url": "https://github.com/imoize/flickernaut",
     "settings-schema": "org.gnome.shell.extensions.flickernaut",
     "gettext-domain": "flickernaut@imoize.github.io",
+    "donations": {
+        "github": "imoize",
+        "kofi": "brilliantnz"
+    },
     "shell-version": [
         "48"
     ],

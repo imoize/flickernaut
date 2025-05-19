@@ -29,19 +29,36 @@ class ProgramConfigLoader:
             List of initialized Package objects (Native/Flatpak)
         """
         packages: list = []
-        packages.extend(Native(cmd) for cmd in entry.get("native", []))
-        packages.extend(Flatpak(app_id) for app_id in entry.get("flatpak", []))
+
+        packages.extend(
+            Native(cmd.strip())
+            for cmd in entry.get("native", [])
+            if isinstance(cmd, str) and cmd.strip()
+        )
+
+        packages.extend(
+            Flatpak(app_id.strip())
+            for app_id in entry.get("flatpak", [])
+            if isinstance(app_id, str) and app_id.strip()
+        )
+
         return packages
 
     @staticmethod
-    def load_from_gsettings() -> ProgramRegistry:
-        """Load and parse programs from GNOME settings.
+    def get_settings(key: str) -> Any:
+        """Retrieve a value from GSettings for any given key.
+
+        Args:
+            key (str): The GSettings key to retrieve the value for.
 
         Returns:
-            ProgramRegistry containing all configured programs.
+            Any: The unpacked value associated with the given key.
+
+        Raises:
+            RuntimeError: If the schema source or schema cannot be loaded,
+                          or if the key is not found in the schema.
         """
         schema_dir = ProgramConfigLoader.get_schema_dir()
-
         schema_source = Gio.SettingsSchemaSource.new_from_directory(
             schema_dir, Gio.SettingsSchemaSource.get_default(), False
         )
@@ -57,9 +74,32 @@ class ProgramConfigLoader:
             )
 
         settings = Gio.Settings.new_full(schema, None, None)
-        values = settings.get_strv("editors")
+        value = settings.get_value(key).unpack()
 
-        programs = ProgramRegistry()
+        return value
+
+    @staticmethod
+    def get_submenu_setting() -> bool:
+        """
+        Determines whether the submenu feature is enabled.
+
+        Returns:
+            bool: True if the submenu feature is enabled, False otherwise.
+
+        Raises:
+            RuntimeError: If the "submenu" GSettings key does not return a boolean.
+        """
+        value = ProgramConfigLoader.get_settings("submenu")
+
+        if not isinstance(value, bool):
+            raise RuntimeError("GSettings key 'submenu' did not return a boolean")
+
+        return value
+
+    @staticmethod
+    def get_applications() -> ProgramRegistry:
+        values = ProgramConfigLoader.get_settings("editors")
+        programs: ProgramRegistry = ProgramRegistry()
 
         for value in values:
             try:
@@ -67,19 +107,27 @@ class ProgramConfigLoader:
                 if not entry.get("enable", True):
                     continue
 
+                arguments = [
+                    arg.strip()
+                    for arg in entry.get("arguments", [])
+                    if isinstance(arg, str) and arg.strip()
+                ]
+
                 program = Program(
                     int(entry["id"]),
                     entry["name"],
                     *ProgramConfigLoader._create_packages(entry),
-                    arguments=entry.get("arguments", []),
+                    arguments=arguments,
                     supports_files=entry.get("supports_files", False),
                 )
 
                 programs[program.id] = program
+
             except (json.JSONDecodeError, KeyError) as e:
                 raise RuntimeError(f"Error parsing editor entry: {e}")
 
         return programs
 
 
-configured_programs: ProgramRegistry = ProgramConfigLoader.load_from_gsettings()
+configured_programs: ProgramRegistry = ProgramConfigLoader.get_applications()
+use_submenu: bool = ProgramConfigLoader.get_submenu_setting()

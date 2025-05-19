@@ -1,4 +1,10 @@
-export interface Editor {
+export interface SchemaType {
+    'settings-version': number;
+    'submenu': boolean;
+    'editors': string[];
+}
+
+export interface Application {
     id: number;
     name: string;
     enable?: boolean;

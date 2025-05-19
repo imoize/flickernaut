@@ -4,13 +4,17 @@ translation-domain "flickernaut@imoize.github.io";
 
 template $General: Adw.PreferencesPage {
   name: "general";
+  icon-name: "org.gnome.Settings-symbolic";
   title: _("General");
 
-  banner: Adw.Banner banner {
-    title: _("Needs to Restart Nautilus");
-  };
+  banner: Adw.Banner banner {};
 
-  Adw.PreferencesGroup editor_group {
-    title: _("Editor");
+  Adw.PreferencesGroup behavior {
+    title: _("Behavior");
+
+    Adw.SwitchRow submenu {
+      title: _("Group In Submenu");
+      subtitle: _("Whether to group entries in a submenu.");
+    }
   }
 }

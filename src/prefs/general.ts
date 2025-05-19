@@ -1,8 +1,8 @@
 import Adw from 'gi://Adw';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
-import { getSettings } from '../lib/prefs/settings.js';
-import { EditorList } from './editors.js';
+import { getSettings, setSettings } from '../lib/prefs/settings.js';
+import { bannerManager } from '../ui/widgets/banner.js';
 
 export const GeneralPage = GObject.registerClass(
     {
@@ -15,31 +15,27 @@ export const GeneralPage = GObject.registerClass(
 
         InternalChildren: [
             'banner',
-            'editor_group',
+            'behavior',
+            'submenu',
         ],
     },
     class extends Adw.PreferencesPage {
-        public declare _banner: Adw.Banner;
-        private declare _editor_group: Adw.PreferencesGroup;
-        private _editors = getSettings();
+        private declare _banner: Adw.Banner;
+        private declare _behavior: Adw.PreferencesGroup;
+        private declare _submenu: Adw.SwitchRow;
 
         constructor() {
             super();
 
-            for (const editor of this._editors) {
-                try {
-                    if (!editor.name) {
-                        console.warn('Skipping editor with no name');
-                        continue;
-                    }
+            bannerManager.register(this._banner);
 
-                    const row = new EditorList(editor, this._banner);
-                    this._editor_group.add(row);
-                }
-                catch (e) {
-                    console.error('Failed to create editor row:', e);
-                }
-            }
+            const state = getSettings('submenu').valueOf();
+
+            this._submenu.active = state;
+
+            this._submenu.connect('notify::active', () => {
+                setSettings('submenu', this._submenu.active);
+            });
         }
     },
 );
