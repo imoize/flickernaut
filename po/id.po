@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2025-05-19 11:31+0700\n"
-"PO-Revision-Date: 2025-05-15 00:21+0000\n"
+"PO-Revision-Date: 2025-05-20 02:36+0000\n"
 "Last-Translator: Brilliant Nz <imoizee@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/flickernaut/"
 "flickernaut/id/>\n"
@@ -21,13 +21,15 @@ msgstr ""
 
 #: src/ui/pages/application.ui:12 src/ui/pages/application.ui:18
 msgid "Apps"
-msgstr ""
+msgstr "Aplikasi"
 
 #: src/ui/pages/application.ui:19
 msgid ""
 "Applications listed here will appear in the Nautilus context menu.\n"
 "You can Enable/Disable using the toggle switch."
 msgstr ""
+"Aplikasi yang tercantum di sini akan muncul di menu konteks Nautilus.\n"
+"Anda dapat Mengaktifkan/Menonaktifkan menggunakan tombol alih."
 
 #: src/ui/pages/general.ui:12
 msgid "General"
@@ -35,15 +37,15 @@ msgstr "Umum"
 
 #: src/ui/pages/general.ui:18
 msgid "Behavior"
-msgstr ""
+msgstr "Perilaku"
 
 #: src/ui/pages/general.ui:21
 msgid "Group In Submenu"
-msgstr ""
+msgstr "Grup Di Submenu"
 
 #: src/ui/pages/general.ui:22
 msgid "Whether to group entries in a submenu."
-msgstr ""
+msgstr "Apakah akan mengelompokkan entri dalam submenu."
 
 #: src/ui/widgets/application-list.ui:12
 msgid "Name"
@@ -63,7 +65,7 @@ msgstr "Argumen"
 
 #: src/ui/widgets/application-list.ui:32
 msgid "Supports Files"
-msgstr ""
+msgstr "Mendukung File"
 
 #: nautilus-extension/Flickernaut/models.py:31
 msgid "Unknown"
@@ -81,11 +83,11 @@ msgstr "Buka di %s"
 
 #: nautilus-extension/Flickernaut/models.py:209
 msgid "Open In..."
-msgstr ""
+msgstr "Buka Di..."
 
 #: nautilus-extension/Flickernaut/models.py:209
 msgid "Open With..."
-msgstr ""
+msgstr "Buka Dengan..."
 
 #: src/prefs/applicationList.ts:55
 msgid "Name cannot be empty"
