@@ -1,0 +1,17 @@
+using Gtk 4.0;
+using Adw 1;
+translation-domain "flickernaut@imoize.github.io";
+
+template $Application: Adw.PreferencesPage {
+  name: "application";
+  icon-name: "org.gnome.Settings-applications-symbolic";
+  title: _("Apps");
+
+  banner: Adw.Banner banner {};
+
+  Adw.PreferencesGroup app_group {
+    title: _("Apps");
+    description: _("Applications listed here will appear in the Nautilus context menu.\nYou can Enable/Disable using the toggle switch.");
+    separate-rows: true;
+  }
+}
