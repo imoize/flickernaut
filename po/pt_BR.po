@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 06:53+0700\n"
+"POT-Creation-Date: 2025-05-19 11:31+0700\n"
 "PO-Revision-Date: 2025-05-15 10:35+0000\n"
 "Last-Translator: Matheus <cybercountry@proton.me>\n"
 "Language-Team: Portuguese (Brazil) <https://hosted.weblate.org/projects/"
@@ -19,64 +19,95 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
 "X-Generator: Weblate 5.12-dev\n"
 
-#: src/ui/pages/general.ui:11
+#: src/ui/pages/application.ui:12 src/ui/pages/application.ui:18
+msgid "Apps"
+msgstr ""
+
+#: src/ui/pages/application.ui:19
+msgid ""
+"Applications listed here will appear in the Nautilus context menu.\n"
+"You can Enable/Disable using the toggle switch."
+msgstr ""
+
+#: src/ui/pages/general.ui:12
 msgid "General"
 msgstr "Geral"
 
-#: src/ui/pages/general.ui:14
-msgid "Needs to Restart Nautilus"
-msgstr "É preciso reiniciar o Nautilus"
+#: src/ui/pages/general.ui:18
+msgid "Behavior"
+msgstr ""
 
-#: src/ui/pages/general.ui:19
-msgid "Editor"
-msgstr "Editor"
+#: src/ui/pages/general.ui:21
+msgid "Group In Submenu"
+msgstr ""
+
+#: src/ui/pages/general.ui:22
+msgid "Whether to group entries in a submenu."
+msgstr ""
+
+#: src/ui/widgets/application-list.ui:12
+msgid "Name"
+msgstr "Nome"
+
+#: src/ui/widgets/application-list.ui:17
+msgid "Native Cmd"
+msgstr "Comando nativo"
+
+#: src/ui/widgets/application-list.ui:22
+msgid "Flatpak ID"
+msgstr "Flatpak ID"
+
+#: src/ui/widgets/application-list.ui:27
+msgid "Arguments"
+msgstr "Argumentos"
+
+#: src/ui/widgets/application-list.ui:32
+msgid "Supports Files"
+msgstr ""
 
 #: nautilus-extension/Flickernaut/models.py:31
 msgid "Unknown"
 msgstr "Desconhecido"
 
-#: nautilus-extension/Flickernaut/models.py:175
+#: nautilus-extension/Flickernaut/models.py:184
 #, python-format
 msgid "Open with %s"
 msgstr "Abrir com %s"
 
-#: nautilus-extension/Flickernaut/models.py:177
+#: nautilus-extension/Flickernaut/models.py:186
 #, python-format
 msgid "Open in %s"
 msgstr "Abrir em %s"
 
-#: src/prefs/editors.ts:27
-msgid "Name"
-msgstr "Nome"
+#: nautilus-extension/Flickernaut/models.py:209
+msgid "Open In..."
+msgstr ""
 
-#: src/prefs/editors.ts:41
+#: nautilus-extension/Flickernaut/models.py:209
+msgid "Open With..."
+msgstr ""
+
+#: src/prefs/applicationList.ts:55
 msgid "Name cannot be empty"
 msgstr "Nome não pode estar em branco"
 
-#: src/prefs/editors.ts:43
+#: src/prefs/applicationList.ts:57
 msgid "Name already exists"
 msgstr "Esse nome já existe"
 
-#: src/prefs/editors.ts:57
-msgid "Native Cmd"
-msgstr "Comando nativo"
-
-#: src/prefs/editors.ts:70
+#: src/prefs/applicationList.ts:79
 msgid "Native command already exists"
 msgstr "Esse comando nativo já está em uso"
 
-#: src/prefs/editors.ts:82
-msgid "Flatpak ID"
-msgstr "Flatpak ID"
-
-#: src/prefs/editors.ts:95
+#: src/prefs/applicationList.ts:99
 msgid "Flatpak ID already exists"
 msgstr "Esse Flatpak ID já está em uso"
 
-#: src/prefs/editors.ts:107
-msgid "Arguments"
-msgstr "Argumentos"
+#~ msgid "Needs to Restart Nautilus"
+#~ msgstr "É preciso reiniciar o Nautilus"
 
-#: src/prefs/editors.ts:116
-msgid "Support File"
-msgstr "Suporte a arquivos"
+#~ msgid "Editor"
+#~ msgstr "Editor"
+
+#~ msgid "Support File"
+#~ msgstr "Suporte a arquivos"
