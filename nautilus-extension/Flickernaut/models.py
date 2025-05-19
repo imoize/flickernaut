@@ -112,7 +112,7 @@ class Flatpak(Package):
 
     @property
     def is_installed(self) -> bool:
-        if not self._flatpak_path:
+        if not self._flatpak_path or not self.app_id.strip():
             return False
         return any(
             os.path.exists(os.path.join(bin_dir, self.app_id))
@@ -158,8 +158,14 @@ class ProgramRegistry(ProgramDict):
         GLib.spawn_close_pid(pid)
 
     def get_menu_items(
-        self, path: str, *, id_prefix: str = "", is_file: bool = False
+        self,
+        path: str,
+        *,
+        id_prefix: str = "",
+        is_file: bool = False,
+        use_submenu: bool = False,
     ) -> list[Nautilus.MenuItem]:
+
         items: list[Nautilus.MenuItem] = []
 
         for program in self:
@@ -169,6 +175,9 @@ class ProgramRegistry(ProgramDict):
             installed = program.installed_packages
 
             for pkg in installed:
+                if not pkg.is_installed:
+                    continue
+
                 show_type = len(installed) > 1 and pkg.type_name
 
                 if is_file:
@@ -190,6 +199,20 @@ class ProgramRegistry(ProgramDict):
                 )
 
                 items.append(item)
+
+        if use_submenu and items:
+            submenu = Nautilus.Menu()
+
+            for item in items:
+                submenu.append_item(item)
+
+            label = _("Open In...") if not is_file else _("Open With...")
+
+            submenu_item = Nautilus.MenuItem.new(id_prefix + "submenu", label)
+
+            submenu_item.set_submenu(submenu)
+
+            return [submenu_item]
 
         return items
 

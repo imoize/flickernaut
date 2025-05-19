@@ -1,0 +1,25 @@
+using Gtk 4.0;
+using Adw 1;
+translation-domain "flickernaut@imoize.github.io";
+
+template $ApplicationList: Adw.ExpanderRow {
+  Adw.EntryRow name {
+    title: _("Name");
+  }
+
+  Adw.EntryRow native {
+    title: _("Native Cmd");
+  }
+
+  Adw.EntryRow flatpak {
+    title: _("Flatpak ID");
+  }
+
+  Adw.EntryRow arguments {
+    title: _("Arguments");
+  }
+
+  Adw.SwitchRow supports_files {
+    title: _("Supports Files");
+  }
+}

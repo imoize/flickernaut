@@ -1,5 +1,19 @@
 import type Gio from 'gi://Gio';
-import type { Editor } from '../../../@types/types.js';
+import type { Application, SchemaType } from '../../../@types/types.js';
+import GLib from 'gi://GLib';
+import { bannerManager } from '../../ui/widgets/banner.js';
+
+/**
+ * All existing schema keys.
+ */
+export type SchemaKey = keyof SchemaType;
+
+/** Mapping of schema keys to GLib Variant type string */
+export const SchemaVariant = {
+    'settings-version': 'i',
+    'submenu': 'b',
+    'editors': 'as',
+};
 
 /**
  * Raw GSettings object for direct manipulation.
@@ -27,33 +41,58 @@ export function uninitSettings() {
 }
 
 /**
- * Retrieves the list of editor configurations from the settings.
+ * Get a preference from GSettings and convert it from a GLib Variant to a
+ * JavaScript type.
  *
- * @returns An array of `Editor` objects parsed from the settings.
+ * @param key - The key of the preference to get.
+ * @returns The value of the preference.
  */
-export function getSettings(): Editor[] {
-    return settings.get_strv('editors')
+export function getSettings<K extends SchemaKey>(key: K): SchemaType[K] {
+    return settings.get_value(key).recursiveUnpack();
+}
+
+/**
+ * Pack a value into a GLib Variant type and store it in GSettings.
+ *
+ * @param key - The key of the preference to set.
+ * @param value - The value to set the preference to.
+ */
+export function setSettings<K extends SchemaKey>(key: K, value: SchemaType[K]) {
+    const variant = new GLib.Variant(SchemaVariant[key], value);
+
+    settings.set_value(key, variant);
+
+    bannerManager.showAll();
+}
+
+/**
+ * Retrieves the list of application configurations from the settings.
+ *
+ * @returns An array of `Application` objects parsed from the settings.
+ */
+export function getAppSettings(): Application[] {
+    return getSettings('editors')
         .map((json) => {
             try {
-                return JSON.parse(json) as Editor;
+                return JSON.parse(json) as Application;
             }
             catch {
                 return null;
             }
         })
-        .filter((e): e is Editor => e !== null);
+        .filter((e): e is Application => e !== null);
 }
 
 /**
- * Updates the settings with a new or modified editor configuration.
+ * Updates the settings with a new or modified application configuration.
  *
- * @param newSettings - The new or updated `Editor` configuration to be saved.
+ * @param newAppSettings - The new or updated `Application` configuration to be saved.
  */
-export function setSettings(newSettings: Editor): void {
-    const configs = getSettings();
+export function setAppSettings(newAppSettings: Application): void {
+    const configs = getAppSettings();
     const newConfigs = configs.map(e =>
-        e.id === newSettings.id ? newSettings : e,
+        e.id === newAppSettings.id ? newAppSettings : e,
     );
 
-    settings.set_strv('editors', newConfigs.map(e => JSON.stringify(e)));
+    setSettings('editors', newConfigs.map(e => JSON.stringify(e)));
 }

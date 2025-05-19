@@ -8,15 +8,20 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
   <requires lib="gtk" version="4.0"/>
   <template class="General" parent="AdwPreferencesPage">
     <property name="name">general</property>
+    <property name="icon-name">org.gnome.Settings-symbolic</property>
     <property name="title" translatable="yes">General</property>
     <property name="banner">
-      <object class="AdwBanner" id="banner">
-        <property name="title" translatable="yes">Needs to Restart Nautilus</property>
-      </object>
+      <object class="AdwBanner" id="banner"></object>
     </property>
     <child>
-      <object class="AdwPreferencesGroup" id="editor_group">
-        <property name="title" translatable="yes">Editor</property>
+      <object class="AdwPreferencesGroup" id="behavior">
+        <property name="title" translatable="yes">Behavior</property>
+        <child>
+          <object class="AdwSwitchRow" id="submenu">
+            <property name="title" translatable="yes">Group In Submenu</property>
+            <property name="subtitle" translatable="yes">Whether to group entries in a submenu.</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

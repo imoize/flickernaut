@@ -2,7 +2,7 @@ import os.path
 import gettext
 from typing import Optional
 from gi.repository import Nautilus, GObject, GLib
-from Flickernaut.manager import configured_programs
+from Flickernaut.manager import configured_programs, use_submenu
 
 # Init gettext translations
 LOCALE_DIR = os.path.join(
@@ -47,7 +47,10 @@ class FlickernautExtension(GObject.Object, Nautilus.MenuProvider):
         """
         folder_path = folder.get_location().get_path()
         return configured_programs.get_menu_items(
-            folder_path, id_prefix=id_prefix, is_file=is_file
+            folder_path,
+            id_prefix=id_prefix,
+            is_file=is_file,
+            use_submenu=use_submenu,
         )
 
     def get_background_items(self, *args) -> list[Nautilus.MenuItem]:

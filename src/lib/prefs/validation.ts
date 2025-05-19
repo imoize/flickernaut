@@ -1,5 +1,5 @@
 import type { ValidationResult } from '../../../@types/types.js';
-import { getSettings } from './settings.js';
+import { getAppSettings } from './settings.js';
 
 type ValidateField = 'name' | 'native' | 'flatpak';
 
@@ -24,7 +24,7 @@ export function validate(
         return { isValid: false, isDuplicate: false, isEmpty: true };
     }
 
-    const editors = getSettings().filter(editor => editor.id !== id);
+    const editors = getAppSettings().filter(editor => editor.id !== id);
 
     let isDuplicate = false;
     if (field === 'name') {
