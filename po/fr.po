@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-19 11:31+0700\n"
+"POT-Creation-Date: 2025-05-20 10:00+0700\n"
 "PO-Revision-Date: 2025-05-15 00:08+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/flickernaut/"
@@ -101,4 +101,16 @@ msgstr ""
 
 #: src/prefs/applicationList.ts:99
 msgid "Flatpak ID already exists"
+msgstr ""
+
+#: src/ui/widgets/banner.ts:26
+msgid "Restart Nautilus to apply changes."
+msgstr ""
+
+#: src/ui/widgets/banner.ts:27
+msgid "Restart"
+msgstr ""
+
+#: src/ui/widgets/banner.ts:28
+msgid "Nautilus will be closed and restarted after clicking this button."
 msgstr ""
