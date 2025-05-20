@@ -52,7 +52,7 @@ pot:
 		--output=po/${UUID}.pot \
 		--language=JavaScript \
 		--join-existing \
-		src/**/*.ts
+		$(shell find src -name '*.ts')
 
 pot-merge:
 	@echo "Merging translations into existing PO files..."
