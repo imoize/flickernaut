@@ -3,9 +3,9 @@ import GLib from 'gi://GLib';
 import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 
 /**
- * BannerManager handles registration, display, and cleanup of Adw.Banner instances.
+ * BannerHandler handles registration, display, and cleanup of Adw.Banner instances.
  */
-class BannerManager {
+export class BannerHandler {
     private banners: Adw.Banner[] = [];
 
     /**
@@ -70,5 +70,3 @@ class BannerManager {
         }
     }
 }
-
-export const bannerManager = new BannerManager();
