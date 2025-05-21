@@ -1,8 +1,8 @@
+import type { BannerHandler } from '../ui/widgets/banner.js';
 import Adw from 'gi://Adw';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import { getSettings, setSettings } from '../lib/prefs/settings.js';
-import { bannerManager } from '../ui/widgets/banner.js';
 
 export const GeneralPage = GObject.registerClass(
     {
@@ -23,18 +23,20 @@ export const GeneralPage = GObject.registerClass(
         private declare _banner: Adw.Banner;
         private declare _behavior: Adw.PreferencesGroup;
         private declare _submenu: Adw.SwitchRow;
+        private declare _bannerHandler: BannerHandler;
 
-        constructor() {
+        constructor(bannerHandler: BannerHandler) {
             super();
 
-            bannerManager.register(this._banner);
+            this._bannerHandler = bannerHandler;
+            this._bannerHandler.register(this._banner);
 
             const state = getSettings('submenu').valueOf();
 
             this._submenu.active = state;
 
             this._submenu.connect('notify::active', () => {
-                setSettings('submenu', this._submenu.active);
+                setSettings('submenu', this._submenu.active, this._bannerHandler);
             });
         }
     },

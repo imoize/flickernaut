@@ -1,8 +1,8 @@
+import type { BannerHandler } from '../ui/widgets/banner.js';
 import Adw from 'gi://Adw';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
 import { getAppSettings } from '../lib/prefs/settings.js';
-import { bannerManager } from '../ui/widgets/banner.js';
 import { ApplicationList } from './applicationList.js';
 
 export const ApplicationPage = GObject.registerClass(
@@ -22,11 +22,13 @@ export const ApplicationPage = GObject.registerClass(
     class extends Adw.PreferencesPage {
         private declare _banner: Adw.Banner;
         private declare _app_group: Adw.PreferencesGroup;
+        private declare _bannerHandler: BannerHandler;
 
-        constructor() {
+        constructor(bannerHandler: BannerHandler) {
             super();
 
-            bannerManager.register(this._banner);
+            this._bannerHandler = bannerHandler;
+            this._bannerHandler.register(this._banner);
 
             const applications = getAppSettings();
 
@@ -37,7 +39,7 @@ export const ApplicationPage = GObject.registerClass(
                         continue;
                     }
 
-                    this._app_group.add(new ApplicationList(application));
+                    this._app_group.add(new ApplicationList(application, this._bannerHandler));
                 }
                 catch (e) {
                     console.error('Failed to create application row:', e);

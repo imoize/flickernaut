@@ -1,7 +1,7 @@
 import type Gio from 'gi://Gio';
 import type { Application, SchemaType } from '../../../@types/types.js';
+import type { BannerHandler } from '../../ui/widgets/banner.js';
 import GLib from 'gi://GLib';
-import { bannerManager } from '../../ui/widgets/banner.js';
 
 /**
  * All existing schema keys.
@@ -57,12 +57,13 @@ export function getSettings<K extends SchemaKey>(key: K): SchemaType[K] {
  * @param key - The key of the preference to set.
  * @param value - The value to set the preference to.
  */
-export function setSettings<K extends SchemaKey>(key: K, value: SchemaType[K]) {
+export function setSettings<K extends SchemaKey>(key: K, value: SchemaType[K], bannerHandler?: BannerHandler) {
     const variant = new GLib.Variant(SchemaVariant[key], value);
 
     settings.set_value(key, variant);
 
-    bannerManager.showAll();
+    if (bannerHandler)
+        bannerHandler.showAll();
 }
 
 /**
@@ -88,11 +89,11 @@ export function getAppSettings(): Application[] {
  *
  * @param newAppSettings - The new or updated `Application` configuration to be saved.
  */
-export function setAppSettings(newAppSettings: Application): void {
+export function setAppSettings(newAppSettings: Application, bannerHandler?: BannerHandler): void {
     const configs = getAppSettings();
     const newConfigs = configs.map(e =>
         e.id === newAppSettings.id ? newAppSettings : e,
     );
 
-    setSettings('editors', newConfigs.map(e => JSON.stringify(e)));
+    setSettings('editors', newConfigs.map(e => JSON.stringify(e)), bannerHandler);
 }

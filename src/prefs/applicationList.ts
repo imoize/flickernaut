@@ -1,4 +1,5 @@
 import type { Application } from '../../@types/types.js';
+import type { BannerHandler } from '../ui/widgets/banner.js';
 import Adw from 'gi://Adw';
 import GLib from 'gi://GLib';
 import GObject from 'gi://GObject';
@@ -17,9 +18,12 @@ export class ApplicationListClass extends Adw.ExpanderRow {
     private declare _arguments: Adw.EntryRow;
     private declare _supports_files: Adw.SwitchRow;
     private declare _toggleSwitch: ToggleSwitchClass;
+    private declare _bannerHandler: BannerHandler;
 
-    constructor(application: Application) {
+    constructor(application: Application, bannerHandler: BannerHandler) {
         super();
+
+        this._bannerHandler = bannerHandler;
 
         this.title = application.name;
 
@@ -134,7 +138,7 @@ export class ApplicationListClass extends Adw.ExpanderRow {
         this.set_title(newAppSettings.name);
 
         try {
-            setAppSettings(newAppSettings);
+            setAppSettings(newAppSettings, this._bannerHandler);
         }
         catch (error) {
             console.error('Failed to update application configuration:', error);
