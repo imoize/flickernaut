@@ -1,3 +1,4 @@
+import type { SchemaKey } from '../lib/prefs/settings.js';
 import type { BannerHandler } from '../ui/widgets/banner.js';
 import Adw from 'gi://Adw';
 import GLib from 'gi://GLib';
@@ -23,20 +24,22 @@ export const GeneralPage = GObject.registerClass(
         private declare _banner: Adw.Banner;
         private declare _behavior: Adw.PreferencesGroup;
         private declare _submenu: Adw.SwitchRow;
+        private declare _schemaKey: typeof SchemaKey;
         private declare _bannerHandler: BannerHandler;
 
-        constructor(bannerHandler: BannerHandler) {
+        constructor(schemaKey: typeof SchemaKey, bannerHandler: BannerHandler) {
             super();
 
+            this._schemaKey = schemaKey;
             this._bannerHandler = bannerHandler;
             this._bannerHandler.register(this._banner);
 
-            const state = getSettings('submenu').valueOf();
+            const state = getSettings(this._schemaKey.submenu).valueOf();
 
             this._submenu.active = state;
 
             this._submenu.connect('notify::active', () => {
-                setSettings('submenu', this._submenu.active, this._bannerHandler);
+                setSettings(this._schemaKey.submenu, this._submenu.active, this._bannerHandler);
             });
         }
     },
