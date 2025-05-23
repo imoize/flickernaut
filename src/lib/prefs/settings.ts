@@ -17,7 +17,7 @@ export const SchemaKey = {
  *
  * The values represent the type of schema variant:
  * - `'as'`: Application schema
- * - `'i'`: Integer schema (e.g., version)
+ * - `'u'`: Unsigned integer schema (e.g., version)
  * - `'b'`: Boolean schema (e.g., submenu)
  *
  * @remarks
@@ -25,7 +25,7 @@ export const SchemaKey = {
  */
 const SchemaVariant: Record<(typeof SchemaKey)[keyof typeof SchemaKey], string> = {
     'applications': 'as',
-    'settings-version': 'i',
+    'settings-version': 'u',
     'submenu': 'b',
 } as const;
 
@@ -40,6 +40,7 @@ let settings: Gio.Settings;
  * @param gSettings - A `Gio.Settings` to initialize the settings with.
  */
 export function initSettings(gSettings: Gio.Settings): void {
+    migrateSettings(gSettings);
     settings = gSettings;
 }
 
@@ -51,6 +52,30 @@ export function initSettings(gSettings: Gio.Settings): void {
  */
 export function uninitSettings() {
     (settings as Gio.Settings | null) = null;
+}
+
+/**
+ * Migrates the application settings to the latest version if necessary.
+ *
+ * This function checks the current version of the settings stored in `Gio.Settings`.
+ * If the settings are outdated (i.e., the stored version is less than the required `lastVersion`),
+ * it performs necessary migration steps, such as resetting deprecated keys,
+ * and updates the settings version to the latest.
+ *
+ * @param settings - The `Gio.Settings` instance containing the application's settings.
+ */
+function migrateSettings(settings: Gio.Settings) {
+    const lastVersion = 2;
+    const currentVersion = settings
+        .get_user_value(SchemaKey.settingsVersion)
+        ?.recursiveUnpack();
+
+    if (!currentVersion || currentVersion < lastVersion) {
+        if (settings.list_keys().includes('editors')) {
+            settings.reset('editors');
+        }
+        settings.set_uint(SchemaKey.settingsVersion, lastVersion);
+    }
 }
 
 /**
@@ -123,7 +148,6 @@ export function setAppSettings(newAppSettings: Application, bannerHandler?: Bann
     const appSettings = getAppSettings();
     const idx = appSettings.findIndex(app => app.id === newAppSettings.id);
     if (idx === -1) {
-        // Tidak ada aplikasi dengan id tersebut, tidak update
         return;
     }
     const newSettings = appSettings.map(app =>
