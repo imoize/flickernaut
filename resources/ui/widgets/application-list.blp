@@ -7,19 +7,33 @@ template $ApplicationList: Adw.ExpanderRow {
     title: _("Name");
   }
 
-  Adw.EntryRow native {
-    title: _("Native Cmd");
+  Adw.SwitchRow multiple_files {
+    title: _("Multiple Files");
+    subtitle: _("Enable if the app supports opening several files.");
   }
 
-  Adw.EntryRow flatpak {
-    title: _("Flatpak ID");
+  Adw.SwitchRow multiple_folders {
+    title: _("Multiple Folders");
+    subtitle: _("Enable if the app supports opening several folders.");
   }
 
-  Adw.EntryRow arguments {
-    title: _("Arguments");
+  Adw.EntryRow mime_types {
+    title: _("Mime Types");
+    sensitive: false;
   }
 
-  Adw.SwitchRow supports_files {
-    title: _("Supports Files");
+  Adw.WrapBox {
+    align: 1;
+    margin-top: 6;
+    margin-end: 6;
+    margin-bottom: 6;
+
+    Gtk.Button remove_app_button {
+      css-classes: [
+        "error",
+      ];
+
+      label: _("Remove");
+    }
   }
 }

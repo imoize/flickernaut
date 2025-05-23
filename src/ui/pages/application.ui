@@ -19,6 +19,17 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
         <property name="description" translatable="yes">Applications listed here will appear in the Nautilus context menu.
 You can Enable/Disable using the toggle switch.</property>
         <property name="separate-rows">true</property>
+        <property name="header-suffix">
+          <object class="GtkButton" id="add_app_button">
+            <property name="valign">3</property>
+            <property name="child">
+              <object class="AdwButtonContent">
+                <property name="icon-name">list-add-symbolic</property>
+                <property name="label" translatable="yes">Add</property>
+              </object>
+            </property>
+          </object>
+        </property>
       </object>
     </child>
   </template>
