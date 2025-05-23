@@ -1,17 +1,19 @@
 export interface SchemaType {
-    'settings-version': number;
-    'submenu': boolean;
-    'editors': string[];
+    settingsVersion: number;
+    submenu: boolean;
+    applications: string[];
 }
 
 export interface Application {
-    id: number;
+    id: string;
+    appId: string;
     name: string;
-    enable?: boolean;
-    native?: string[];
-    flatpak?: string[];
-    arguments?: string[];
-    supports_files?: boolean;
+    icon: string;
+    pinned: boolean;
+    multipleFiles: boolean;
+    multipleFolders: boolean;
+    mimeTypes?: string[];
+    enable: boolean;
 }
 
 export interface ValidationResult {
