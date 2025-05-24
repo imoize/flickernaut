@@ -1,28 +1,34 @@
 import os.path
 import gettext
 from typing import Optional
-from gi.repository import Nautilus, GObject, GLib
-from Flickernaut.manager import configured_programs, use_submenu
+from Flickernaut.logger import get_logger
+from gi.repository import Nautilus, GObject, GLib  # type: ignore
+from Flickernaut.manager import applications_registry, submenu
+
+logger = get_logger(__name__)
 
 # Init gettext translations
+UUID: str = "flickernaut@imoize.github.io"
+
 LOCALE_DIR = os.path.join(
     GLib.get_user_data_dir(),
     "gnome-shell",
     "extensions",
-    "flickernaut@imoize.github.io",
+    UUID,
     "locale",
 )
 
 if not os.path.exists(LOCALE_DIR):
+    logger.warning(f"Locale dir {LOCALE_DIR} not found, disabling translation.")
     LOCALE_DIR = None
 
 try:
-    gettext.bindtextdomain("flickernaut@imoize.github.io", LOCALE_DIR)
-    gettext.textdomain("flickernaut@imoize.github.io")
+    gettext.bindtextdomain(UUID, LOCALE_DIR)
+    gettext.textdomain(UUID)
     _ = gettext.gettext
 
 except Exception as e:
-    print(f"Flickernaut: gettext init failed: {e}")
+    logger.error(f"gettext init failed: {e}")
     _ = lambda s: s
 
 
@@ -33,44 +39,98 @@ class FlickernautExtension(GObject.Object, Nautilus.MenuProvider):
         super().__init__()
 
     def _get_items(
-        self, folder: Nautilus.FileInfo, *, id_prefix: str = "", is_file: bool = False
+        self,
+        file_info_or_list: list[Nautilus.FileInfo],
+        *,
+        id_prefix: str = "",
+        is_file: bool = False,
+        selection_count: int = 1,
     ) -> list[Nautilus.MenuItem]:
-        """Generate menu items for the given folder/file.
+        """Generate menu items for the given file(s) or folder(s)."""
+        paths = [f.get_location().get_path() for f in file_info_or_list]
 
-        Args:
-            folder: The target folder or file object
-            id_prefix: Prefix for menu item IDs
-            is_file: Whether the target is a file
-
-        Returns:
-            List of menu items to display
-        """
-        folder_path = folder.get_location().get_path()
-        return configured_programs.get_menu_items(
-            folder_path,
+        return applications_registry.get_menu_items(
+            paths,
             id_prefix=id_prefix,
             is_file=is_file,
-            use_submenu=use_submenu,
+            selection_count=selection_count,
+            use_submenu=submenu,
         )
 
     def get_background_items(self, *args) -> list[Nautilus.MenuItem]:
         """Generate menu items for background (directory) clicks."""
         current_folder = args[-1]
-        return self._get_items(current_folder)
+
+        return self._get_items(
+            [current_folder], id_prefix="background", is_file=False, selection_count=1
+        )
 
     def get_file_items(self, *args) -> Optional[list[Nautilus.MenuItem]]:
         """Generate menu items for file selections.
 
         Returns:
-            List of menu items for single selection, None for multiple selections
+            Optional[list[Nautilus.MenuItem]]: List of menu items for single/multi selection, None if not handled.
         """
         selected_files = args[-1]
 
-        # Handle only single file selection
-        if not isinstance(selected_files, list) or len(selected_files) != 1:
+        if not isinstance(selected_files, list) or not selected_files:
+            logger.info("No selection or invalid selection type.")
             return None
 
-        target = selected_files[0]
-        if target.is_directory():
-            return self._get_items(target, id_prefix="selected.")
-        return self._get_items(target, id_prefix="selected.", is_file=True)
+        selection_count = len(selected_files)
+
+        if selection_count == 1:
+            target = selected_files[0]
+            path = target.get_location().get_path()
+
+            if target.is_directory():
+                logger.info(f"Single folder selected: {path}")
+
+                return self._get_items(
+                    [target], id_prefix="selected", is_file=False, selection_count=1
+                )
+            else:
+                logger.info(f"Single file selected: {path}")
+
+                return self._get_items(
+                    [target], id_prefix="selected", is_file=True, selection_count=1
+                )
+        else:
+            # Multi-select: determine if all are files or all are directories
+            types_and_paths = [
+                (f.is_directory(), f.get_location().get_path()) for f in selected_files
+            ]
+            types, paths = zip(*types_and_paths)
+            multiple_dirs = all(types)
+            multiple_files = not any(types)
+
+            MAX_MULTIPLE = 5
+            if selection_count > MAX_MULTIPLE:
+                logger.debug(
+                    f"Too many items selected ({selection_count}), max allowed is {MAX_MULTIPLE}."
+                )
+                return None
+
+            if multiple_dirs:
+                logger.info(f"Multiple folders selected: {paths}")
+
+                return self._get_items(
+                    selected_files,
+                    id_prefix="multiple",
+                    is_file=False,
+                    selection_count=selection_count,
+                )
+            elif multiple_files:
+                logger.info(f"Multiple files selected: {paths}")
+
+                return self._get_items(
+                    selected_files,
+                    id_prefix="multiple",
+                    is_file=True,
+                    selection_count=selection_count,
+                )
+            else:
+                logger.info(
+                    f"Invalid multi-selection (mixed files and folders): {paths}"
+                )
+                return None

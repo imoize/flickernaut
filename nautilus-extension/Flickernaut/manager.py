@@ -1,15 +1,39 @@
-import os
+import os.path
 import json
 from functools import lru_cache
-from typing import Any
-from gi.repository import Gio, GLib
-from .models import ProgramRegistry, Program, Native, Flatpak
+from typing import Any, Optional
+from gi.repository import Gio, GLib  # type: ignore
+from .logger import get_logger
+from .models import Application, ApplicationsRegistry, AppJsonStruct
+
+logger = get_logger(__name__)
 
 
-class ProgramConfigLoader:
+def parse_app_entry(app: dict) -> Optional[AppJsonStruct]:
+    """Helper to validate and map a JSON entry into AppJsonStruct."""
+    try:
+        # Accept both camelCase and snake_case for compatibility
+        return AppJsonStruct(
+            id=app.get("id", "").strip(),
+            app_id=app.get("app_id", app.get("appId", "")).strip(),
+            name=app.get("name", "").strip(),
+            pinned=app.get("pinned", False),
+            multiple_files=app.get("multiple_files", app.get("multipleFiles", False)),
+            multiple_folders=app.get(
+                "multiple_folders", app.get("multipleFolders", False)
+            ),
+            enable=app.get("enable", True),
+        )
+    except Exception as e:
+        logger.error(f"Failed to map app entry: {e}")
+        return None
+
+
+class ApplicationConfigLoader:
     @staticmethod
     @lru_cache(maxsize=1)
     def get_schema_dir() -> str:
+        """Return the schema directory path."""
         return os.path.join(
             GLib.get_user_data_dir(),
             "gnome-shell",
@@ -19,115 +43,107 @@ class ProgramConfigLoader:
         )
 
     @staticmethod
-    def _create_packages(entry: dict[str, Any]) -> list:
-        """Create package instances from JSON entry.
-
-        Args:
-            entry: Dictionary from JSON containing 'native' and/or 'flatpak' keys
-
-        Returns:
-            List of initialized Package objects (Native/Flatpak)
-        """
-        packages: list = []
-
-        packages.extend(
-            Native(cmd.strip())
-            for cmd in entry.get("native", [])
-            if isinstance(cmd, str) and cmd.strip()
-        )
-
-        packages.extend(
-            Flatpak(app_id.strip())
-            for app_id in entry.get("flatpak", [])
-            if isinstance(app_id, str) and app_id.strip()
-        )
-
-        return packages
-
-    @staticmethod
-    def get_settings(key: str) -> Any:
-        """Retrieve a value from GSettings for any given key.
-
-        Args:
-            key (str): The GSettings key to retrieve the value for.
-
-        Returns:
-            Any: The unpacked value associated with the given key.
-
-        Raises:
-            RuntimeError: If the schema source or schema cannot be loaded,
-                          or if the key is not found in the schema.
-        """
-        schema_dir = ProgramConfigLoader.get_schema_dir()
+    @lru_cache(maxsize=1)
+    def get_schema_source() -> Gio.SettingsSchemaSource:
+        """Return the GSettings schema source."""
+        schema_dir = ApplicationConfigLoader.get_schema_dir()
         schema_source = Gio.SettingsSchemaSource.new_from_directory(
             schema_dir, Gio.SettingsSchemaSource.get_default(), False
         )
 
         if not schema_source:
-            raise RuntimeError(f"Failed to load schema source from {schema_dir}")
+            logger.error(f"Failed to load schema source from {schema_dir}")
+            return None
+
+        return schema_source
+
+    @staticmethod
+    def get_gsettings(key: str) -> Optional[Any]:
+        """Retrieve a value from GSettings for any given key."""
+        schema_source = ApplicationConfigLoader.get_schema_source()
+        if schema_source is None:
+            logger.critical("Schema source is None. Cannot read GSettings.")
+            return None
 
         schema = schema_source.lookup("org.gnome.shell.extensions.flickernaut", True)
-
         if not schema:
-            raise RuntimeError(
-                "Schema 'org.gnome.shell.extensions.flickernaut' not found"
+            logger.critical(
+                f"Schema 'org.gnome.shell.extensions.flickernaut' not found."
             )
+            return None
 
         settings = Gio.Settings.new_full(schema, None, None)
         value = settings.get_value(key).unpack()
-
         return value
 
     @staticmethod
     def get_submenu_setting() -> bool:
-        """
-        Determines whether the submenu feature is enabled.
-
-        Returns:
-            bool: True if the submenu feature is enabled, False otherwise.
-
-        Raises:
-            RuntimeError: If the "submenu" GSettings key does not return a boolean.
-        """
-        value = ProgramConfigLoader.get_settings("submenu")
+        """Return True if submenu feature is enabled, else False."""
+        value = ApplicationConfigLoader.get_gsettings("submenu")
 
         if not isinstance(value, bool):
-            raise RuntimeError("GSettings key 'submenu' did not return a boolean")
+            logger.error(
+                f"GSettings key 'submenu' returned unexpected type: {type(value)}"
+            )
+            return False
 
         return value
 
     @staticmethod
-    def get_applications() -> ProgramRegistry:
-        values = ProgramConfigLoader.get_settings("editors")
-        programs: ProgramRegistry = ProgramRegistry()
+    def get_applications() -> ApplicationsRegistry:
+        """Load and parse the configured applications from GSettings."""
+        try:
+            settings = ApplicationConfigLoader.get_gsettings("applications")
+            registry = ApplicationsRegistry()
 
-        for value in values:
-            try:
-                entry = json.loads(value)
-                if not entry.get("enable", True):
+            if not settings:
+                logger.warning("No applications found in GSettings")
+                return registry
+
+            # sort entries by name before adding to registry
+            entries = []
+
+            for value in settings:
+                app_dict = None
+                try:
+                    app_dict = json.loads(value) if isinstance(value, str) else value
+                except Exception as e:
+                    logger.error(f"Error parsing application entry: {e}", exc_info=True)
                     continue
 
-                arguments = [
-                    arg.strip()
-                    for arg in entry.get("arguments", [])
-                    if isinstance(arg, str) and arg.strip()
-                ]
+                schemaKey = parse_app_entry(app_dict)
+                if not schemaKey or not schemaKey["enable"]:
+                    continue
+                entries.append(schemaKey)
 
-                program = Program(
-                    int(entry["id"]),
-                    entry["name"],
-                    *ProgramConfigLoader._create_packages(entry),
-                    arguments=arguments,
-                    supports_files=entry.get("supports_files", False),
+            # Sort entries by 'name' (case-insensitive)
+            entries = sorted(entries, key=lambda x: x["name"].lower())
+
+            for idx, schemaKey in enumerate(entries, 1):
+                logger.debug(f"--- Application Menu Entry {idx} ---")
+
+                for k, v in schemaKey.items():
+                    logger.debug(f"{k}: {v!r}")
+
+                application = Application(
+                    schemaKey["id"],
+                    schemaKey["app_id"],
+                    schemaKey["name"],
+                    schemaKey["pinned"],
+                    schemaKey["multiple_files"],
+                    schemaKey["multiple_folders"],
                 )
 
-                programs[program.id] = program
+                logger.debug("")
 
-            except (json.JSONDecodeError, KeyError) as e:
-                raise RuntimeError(f"Error parsing editor entry: {e}")
+                registry.add_application(application)
 
-        return programs
+            return registry
+
+        except Exception as e:
+            logger.critical(f"Fatal error in get_applications: {e}", exc_info=True)
+            raise
 
 
-configured_programs: ProgramRegistry = ProgramConfigLoader.get_applications()
-use_submenu: bool = ProgramConfigLoader.get_submenu_setting()
+submenu: bool = ApplicationConfigLoader.get_submenu_setting()
+applications_registry: ApplicationsRegistry = ApplicationConfigLoader.get_applications()
