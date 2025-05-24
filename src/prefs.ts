@@ -9,7 +9,7 @@ import { Menu } from './ui/widgets/menu.js';
 export default class FlickernautPrefs extends ExtensionPreferences {
     async fillPreferencesWindow(window: Adw.PreferencesWindow): Promise<void> {
         const menu = new Menu();
-        menu.addMenu(window);
+        menu.add(window);
 
         initSettings(this.getSettings());
 

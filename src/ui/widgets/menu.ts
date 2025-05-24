@@ -20,7 +20,7 @@ export class Menu {
      * - If the menu UI or header bar cannot be found, the method will return early.
      * - The actions added will open external URLs in the user's default browser.
      */
-    addMenu(window: Adw.PreferencesWindow) {
+    add(window: Adw.PreferencesWindow) {
         const builder = new Gtk.Builder();
         try {
             builder.add_from_file(GLib.filename_from_uri(
