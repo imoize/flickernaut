@@ -1,18 +1,20 @@
 import type Adw from 'gi://Adw';
 import { ExtensionPreferences } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
-import { initSettings, uninitSettings } from './lib/prefs/settings.js';
+import { initSettings, SchemaKey, uninitSettings } from './lib/prefs/settings.js';
 import { ApplicationPage } from './prefs/application.js';
 import { GeneralPage } from './prefs/general.js';
 import { BannerHandler } from './ui/widgets/banner.js';
 
 export default class FlickernautPrefs extends ExtensionPreferences {
     async fillPreferencesWindow(window: Adw.PreferencesWindow): Promise<void> {
-        const bannerHandler = new BannerHandler();
-
         initSettings(this.getSettings());
 
-        window.add(new GeneralPage(bannerHandler));
-        window.add(new ApplicationPage(bannerHandler));
+        const settings = this.getSettings();
+        const schemaKey = SchemaKey;
+        const bannerHandler = new BannerHandler();
+
+        window.add(new GeneralPage(schemaKey, bannerHandler));
+        window.add(new ApplicationPage(settings, bannerHandler));
 
         // Clean up resources when the window is closed
         window.connect('close-request', () => {
