@@ -4,9 +4,13 @@ import { initSettings, SchemaKey, uninitSettings } from './lib/prefs/settings.js
 import { ApplicationPage } from './prefs/application.js';
 import { GeneralPage } from './prefs/general.js';
 import { BannerHandler } from './ui/widgets/banner.js';
+import { Menu } from './ui/widgets/menu.js';
 
 export default class FlickernautPrefs extends ExtensionPreferences {
     async fillPreferencesWindow(window: Adw.PreferencesWindow): Promise<void> {
+        const menu = new Menu();
+        menu.addMenu(window);
+
         initSettings(this.getSettings());
 
         const settings = this.getSettings();
