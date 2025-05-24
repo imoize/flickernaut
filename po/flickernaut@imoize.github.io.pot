@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-25 01:53+0700\n"
+"POT-Creation-Date: 2025-05-25 06:39+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -73,6 +73,10 @@ msgstr ""
 
 #: src/ui/widgets/application-list.ui:42
 msgid "Remove"
+msgstr ""
+
+#: src/ui/widgets/menu.ui:12
+msgid "Project Page"
 msgstr ""
 
 #: nautilus-extension/Flickernaut/models.py:286
