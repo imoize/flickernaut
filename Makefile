@@ -73,6 +73,7 @@ pack: build schemas/gschemas.compiled copy-ui mo
 	@cp metadata.json dist/
 	@cp -r schemas dist/
 	@cp -r nautilus-extension/* dist/
+	@cp -r resources/ui/icons dist/ui/
 	@(cd dist && zip ../$(UUID).shell-extension.zip -9r .)
 
 install: pack
