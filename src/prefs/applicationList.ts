@@ -20,6 +20,7 @@ export class ApplicationListClass extends Adw.ExpanderRow {
     private declare _multiple_files: Adw.SwitchRow;
     private declare _multiple_folders: Adw.SwitchRow;
     private declare _mime_types: Adw.EntryRow;
+    private declare _pin_button: Gtk.Button;
     private declare _toggleSwitch: ToggleSwitchClass;
     private declare _remove_app_button: Gtk.Button;
     private declare _bannerHandler: BannerHandler;
@@ -41,6 +42,8 @@ export class ApplicationListClass extends Adw.ExpanderRow {
 
         this._icon = application.icon;
 
+        this._pinned = application.pinned || false;
+
         this._multiple_files.active = application.multipleFiles || false;
 
         this._multiple_folders.active = application.multipleFolders || false;
@@ -53,6 +56,16 @@ export class ApplicationListClass extends Adw.ExpanderRow {
         });
 
         this.add_suffix(this._toggleSwitch);
+
+        this._pin_button = new Gtk.Button({
+            valign: Gtk.Align.CENTER,
+            css_classes: ['flat'],
+            icon_name: 'view-non-pin-symbolic',
+            visible: settings.get_boolean('submenu'),
+            tooltip_text: _('Pin in main menu when submenu is enabled.'),
+        });
+
+        this.add_suffix(this._pin_button);
 
         this._name.connect('changed', () => {
             if (settings && typeof application.id === 'string') {
@@ -92,6 +105,27 @@ export class ApplicationListClass extends Adw.ExpanderRow {
         });
 
         this._toggleSwitch.connect('notify::active', () => {
+            this._updateAppSetting();
+        });
+
+        if (this._pinned) {
+            this._pin_button.icon_name = 'view-pin-symbolic';
+        }
+
+        settings.connect('changed::submenu', () => {
+            const submenuState = settings.get_boolean('submenu');
+            this._pin_button.visible = submenuState;
+        });
+
+        this._pin_button.connect('clicked', () => {
+            this._pinned = !this._pinned;
+
+            if (this._pinned) {
+                this._pin_button.icon_name = 'view-pin-symbolic';
+            }
+            else {
+                this._pin_button.icon_name = 'view-non-pin-symbolic';
+            }
             this._updateAppSetting();
         });
 

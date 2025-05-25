@@ -352,30 +352,53 @@ class ApplicationsRegistry(dict[str, Application]):
 
         items: list[Nautilus.MenuItem] = []
 
+        # Separate pinned items and submenu items
+        pinned_items: list[Nautilus.MenuItem] = []
+        submenu_items: list[Nautilus.MenuItem] = []
+
         for app in self._filter_applications(
             is_file=is_file, selection_count=selection_count
         ):
             for package in app.installed_packages:
                 if not package.is_installed:
                     continue
+
                 item = self._create_menu_item(app, package, paths, id_prefix, is_file)
-                items.append(item)
 
-        if use_submenu and items:
-            submenu = Nautilus.Menu()
+                if use_submenu and app.pinned:
+                    pinned_items.append(item)
+                elif use_submenu:
+                    submenu_items.append(item)
+                else:
+                    items.append(item)
 
-            for item in items:
-                submenu.append_item(item)
+        if use_submenu:
+            result_items = []
 
-            label = _("Open In...") if not is_file else _("Open With...")
+            if submenu_items:
+                submenu = Nautilus.Menu()
 
-            submenu_item = Nautilus.MenuItem.new(
-                f"Flickernaut::submenu::{id_prefix}", label
-            )
+                for item in submenu_items:
+                    submenu.append_item(item)
 
-            submenu_item.set_submenu(submenu)
-            self._menu_cache[cache_key] = [submenu_item]
-            return [submenu_item]
+                label = _("Open In...") if not is_file else _("Open With...")
+
+                submenu_item = Nautilus.MenuItem.new(
+                    f"Flickernaut::submenu::{id_prefix}", label
+                )
+
+                submenu_item.set_submenu(submenu)
+                result_items.append(submenu_item)
+
+            result_items.extend(pinned_items)
+
+            if not result_items:
+                logger.warning(
+                    f"No menu items produced for paths: {paths!r} (is_file={is_file})"
+                )
+
+            self._menu_cache[cache_key] = result_items
+            return result_items
 
         if not items:
             logger.warning(
