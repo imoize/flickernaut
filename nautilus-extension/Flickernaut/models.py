@@ -44,24 +44,28 @@ class Package:
 class Launcher(Package):
     """Represents a launchable desktop application."""
 
-    def __init__(self, app_id: str) -> None:
+    def __init__(self, app_id: str, name: str) -> None:
         if not app_id or not isinstance(app_id, str):
             logger.error("app_id must be a non-empty string")
 
             self.app_id = ""
-            self.commandline = ""
+            self.name = ""
+            self.commandline = []
             self.installed = False
             self._run_command = ()
             self._launch_method = "none"
             self._init_failed = True
+            self._app_info = None
             return
 
         self.app_id: str = app_id
-        self.commandline: str = ""
+        self.name: str = name
+        self.commandline: list[str] = []
         self.installed: bool = False
         self._run_command: tuple[str, ...] = ()
         self._launch_method: str = "none"
         self._init_failed: bool = False
+        self._app_info: Optional[Gio.DesktopAppInfo] = None
 
         app_info = Gio.DesktopAppInfo.new(app_id)
         if not app_info:
@@ -69,22 +73,26 @@ class Launcher(Package):
             self._init_failed = True
             return
 
+        self._app_info = app_info
+
         self.installed = self._is_app_installed(app_info)
-        logger.debug("installed: %s", self.installed)
 
         self.commandline = self._get_commandline(app_info)
-        logger.debug("commandline: %s", self.commandline)
 
         self._set_launch_command(app_info)
 
-        logger.debug(
-            "launcher: method=%s, command=%s",
-            self._launch_method,
-            self._run_command,
-        )
+        logger.debug(f"installed: {self.installed}")
+        logger.debug(f"launcher method: {self._launch_method}")
+        logger.debug(f"commandline: {self.commandline}")
 
-    def _get_commandline(self, app_info: Gio.DesktopAppInfo) -> str:
+    def _get_commandline(self, app_info: Gio.DesktopAppInfo) -> list[str]:
         """Get the commandline from the app_info, handling special cases."""
+        executable = os.path.basename(app_info.get_executable()) or ""
+
+        bin_path = GLib.find_program_in_path(executable)
+        if not bin_path:
+            return []
+
         commandline = app_info.get_commandline() or ""
 
         # Split commandline into tokens while respecting quotes
@@ -110,18 +118,20 @@ class Launcher(Package):
             "@@",
             "@",
         }
-
         filtered = [
             t for t in tokens if t not in placeholders and not t.startswith("%")
         ]
-        # Join back to command string
-        return " ".join(filtered)
+
+        if bin_path and filtered:
+            filtered[0] = bin_path
+
+        return filtered
 
     def _is_app_installed(self, app_info: Gio.DesktopAppInfo) -> bool:
-        _exec = app_info.get_executable() or ""
-        _package_type = os.path.basename(_exec) if _exec else ""
+        exec = app_info.get_executable() or ""
+        package_type = os.path.basename(exec) if exec else ""
 
-        if _package_type == "flatpak":
+        if package_type == "flatpak":
             logger.debug("package type: flatpak")
 
             flatpak_dirs = [
@@ -135,22 +145,22 @@ class Launcher(Package):
                     return True
             return False
 
-        elif _package_type.endswith(".appimage"):
+        elif package_type.endswith(".appimage"):
             logger.debug("package type: appimage")
 
-            if _exec and _exec.endswith(".appimage"):
-                if os.path.exists(_exec) and os.access(_exec, os.X_OK):
+            if exec and exec.endswith(".appimage"):
+                if os.path.exists(exec) and os.access(exec, os.X_OK):
                     return True
             return False
 
-        elif _exec:
+        elif exec:
             logger.debug("package type: native")
 
-            if os.path.isabs(_exec):
-                if os.path.exists(_exec) and os.access(_exec, os.X_OK):
+            if os.path.isabs(exec):
+                if os.path.exists(exec) and os.access(exec, os.X_OK):
                     return True
             else:
-                bin_path = GLib.find_program_in_path(_exec)
+                bin_path = GLib.find_program_in_path(exec)
                 if (
                     bin_path
                     and os.path.exists(bin_path)
@@ -163,37 +173,71 @@ class Launcher(Package):
 
     def _set_launch_command(self, app_info: Gio.DesktopAppInfo) -> None:
         """Determine the best launch command for the application."""
-        # Try gtk-launch first (most reliable for desktop integration)
-        launcher = GLib.find_program_in_path("gtk-launch")
-        if launcher and os.path.isfile(launcher):
+        # 1. Try Gio.AppInfo.launch_uris first
+        if app_info:
+            self._launch_method = "gio-launch"
+            self._run_command = ()
+            return
+
+        # 2. Fallback to gtk-launch if gio-launch is not available
+        bin_path = GLib.find_program_in_path("gtk-launch")
+        if bin_path and os.path.isfile(bin_path):
             desktop_id = (
                 self.app_id[:-8] if self.app_id.endswith(".desktop") else self.app_id
             )
-            self._run_command = (launcher, desktop_id)
             self._launch_method = "gtk-launch"
+            self._run_command = (bin_path, desktop_id)
             return
 
-        # Fall back to direct commandline execution
+        # 3. Fallback to commandline if other methods are not available
         if self.commandline:
-            commandline = GLib.find_program_in_path(self.commandline)
-            if (
-                commandline
-                and os.path.isfile(commandline)
-                and os.access(commandline, os.X_OK)
-            ):
-                self._run_command = (commandline,)
-                self._launch_method = "commandline"
-                return
-
-        # If we get here, no valid launch method was found
-        logger.error(
-            f"Could not find a valid way to launch {self.app_id}. "
-            f"Tried: gtk-launch, commandline ({self.commandline})"
-        )
+            self._launch_method = "commandline"
+            self._run_command = tuple(self.commandline)
+            return
 
         self._run_command = ()
         self._launch_method = "none"
         self._init_failed = True
+
+    def launch(self, paths: list[str]) -> bool:
+        """Launch the application based _launch_method."""
+        if self._launch_method == "gio-launch" and self._app_info:
+            uris = [GLib.filename_to_uri(p, None) for p in paths]
+            try:
+                logger.debug(f"Launching {self.name} with gio-launch: {uris}")
+                ctx = None
+                self._app_info.launch_uris(uris, ctx)
+                return True
+            except Exception as e:
+                logger.error(
+                    f"Failed to launch {self.name} with Gio.AppInfo.launch_uris: {e}"
+                )
+                return False
+
+        elif self._launch_method == "gtk-launch":
+            try:
+                command = list(self._run_command) + list(paths)
+                logger.debug(f"Launching {self.name}: {command}")
+                pid, *_ = GLib.spawn_async(command)
+                GLib.spawn_close_pid(pid)
+                return True
+            except Exception as e:
+                logger.error(f"Failed to launch {self.name} with gtk-launch: {e}")
+                return False
+
+        elif self._launch_method == "commandline":
+            try:
+                command = list(self._run_command) + list(paths)
+                logger.debug(f"Launching {self.name} with commandline: {command}")
+                pid, *_ = GLib.spawn_async(command)
+                GLib.spawn_close_pid(pid)
+                return True
+            except Exception as e:
+                logger.error(f"Failed to launch {self.name} with commandline: {e}")
+                return False
+
+        logger.error(f"No valid launch method for {self.app_id}")
+        return False
 
     @property
     def run_command(self) -> tuple[str, ...]:
@@ -228,9 +272,9 @@ class Application:
         self.pinned: bool = pinned
         self.multiple_files: bool = multiple_files
         self.multiple_folders: bool = multiple_folders
-        self.package: Optional[Package] = None
+        self.package: Optional[Launcher] = None
         try:
-            launcher = Launcher(app_id)
+            launcher = Launcher(app_id, name)
             if launcher.is_installed:
                 self.package = launcher
             else:
@@ -242,7 +286,7 @@ class Application:
             self.package = None
 
     @property
-    def installed_packages(self) -> list[Package]:
+    def installed_packages(self) -> list[Launcher]:
         return [self.package] if self.package and self.package.is_installed else []
 
 
@@ -264,24 +308,36 @@ class ApplicationsRegistry(dict[str, Application]):
         self[application.id] = application
 
     @staticmethod
-    def _activate_menu_item(item: Nautilus.MenuItem, command: list[str]) -> None:
+    def _activate_menu_item(
+        item: Nautilus.MenuItem, launcher: Launcher, paths: list[str]
+    ) -> None:
         """Callback to activate a menu item and launch the command."""
-        logger.debug(f"Launch command: {command}")
         try:
-            pid, *_ = GLib.spawn_async(command)
-            GLib.spawn_close_pid(pid)
+            if not launcher:
+                logger.error("No valid launcher provided for menu item activation.")
+                return
+            if not paths:
+                logger.error("No paths provided for launcher.")
+                return
+            if launcher.launch(paths):
+                logger.debug(
+                    f"Launch succeeded for {launcher.name} with paths: {paths}"
+                )
+                return
+            else:
+                logger.error(f"All launch methods failed for: {launcher.app_id}")
         except Exception as e:
-            logger.error(f"Failed to spawn command {command}: {e}")
+            logger.error(f"Error during launching application: {e}")
 
     def _create_menu_item(
         self,
         application: Application,
-        package: Package,
+        launcher: Launcher,
         paths: list[str],
         id_prefix: str,
         is_file: bool,
     ) -> Nautilus.MenuItem:
-        """Create a Nautilus.MenuItem for a given application and package."""
+        """Create a Nautilus.MenuItem for a given application and launcher."""
         label = (
             _("Open with %s") % application.name
             if is_file
@@ -293,9 +349,7 @@ class ApplicationsRegistry(dict[str, Application]):
             label=label,
         )
 
-        item.connect(
-            "activate", self._activate_menu_item, [*package.run_command, *paths]
-        )
+        item.connect("activate", self._activate_menu_item, launcher, paths)
         return item
 
     def _filter_applications(
@@ -359,11 +413,11 @@ class ApplicationsRegistry(dict[str, Application]):
         for app in self._filter_applications(
             is_file=is_file, selection_count=selection_count
         ):
-            for package in app.installed_packages:
-                if not package.is_installed:
+            for launcher in app.installed_packages:
+                if not launcher.is_installed:
                     continue
 
-                item = self._create_menu_item(app, package, paths, id_prefix, is_file)
+                item = self._create_menu_item(app, launcher, paths, id_prefix, is_file)
 
                 if use_submenu and app.pinned:
                     pinned_items.append(item)
