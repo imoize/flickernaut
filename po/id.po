@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 10:00+0700\n"
+"POT-Creation-Date: 2025-05-26 16:17+0700\n"
 "PO-Revision-Date: 2025-05-20 02:36+0000\n"
 "Last-Translator: Brilliant Nz <imoizee@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/flickernaut/"
@@ -31,6 +31,10 @@ msgstr ""
 "Aplikasi yang tercantum di sini akan muncul di menu konteks Nautilus.\n"
 "Anda dapat Mengaktifkan/Menonaktifkan menggunakan tombol alih."
 
+#: src/ui/pages/application.ui:28
+msgid "Add"
+msgstr ""
+
 #: src/ui/pages/general.ui:12
 msgid "General"
 msgstr "Umum"
@@ -52,58 +56,62 @@ msgid "Name"
 msgstr "Nama"
 
 #: src/ui/widgets/application-list.ui:17
-msgid "Native Cmd"
-msgstr "Perintah Bawaan"
+msgid "Multiple Files"
+msgstr ""
 
-#: src/ui/widgets/application-list.ui:22
-msgid "Flatpak ID"
-msgstr "ID Flatpak"
+#: src/ui/widgets/application-list.ui:18
+msgid "Enable if the app supports opening several files."
+msgstr ""
 
-#: src/ui/widgets/application-list.ui:27
-msgid "Arguments"
-msgstr "Argumen"
+#: src/ui/widgets/application-list.ui:23
+msgid "Multiple Folders"
+msgstr ""
 
-#: src/ui/widgets/application-list.ui:32
-msgid "Supports Files"
-msgstr "Mendukung File"
+#: src/ui/widgets/application-list.ui:24
+msgid "Enable if the app supports opening several folders."
+msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:31
-msgid "Unknown"
-msgstr "Tidak Diketahui"
+#: src/ui/widgets/application-list.ui:29
+msgid "Mime Types"
+msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:184
+#: src/ui/widgets/application-list.ui:42
+msgid "Remove"
+msgstr ""
+
+#: src/ui/widgets/menu.ui:12
+msgid "Project Page"
+msgstr ""
+
+#: nautilus-extension/Flickernaut/registry.py:61
 #, python-format
 msgid "Open with %s"
 msgstr "Buka dengan %s"
 
-#: nautilus-extension/Flickernaut/models.py:186
+#: nautilus-extension/Flickernaut/registry.py:63
 #, python-format
 msgid "Open in %s"
 msgstr "Buka di %s"
 
-#: nautilus-extension/Flickernaut/models.py:209
+#: nautilus-extension/Flickernaut/registry.py:160
 msgid "Open In..."
 msgstr "Buka Di..."
 
-#: nautilus-extension/Flickernaut/models.py:209
+#: nautilus-extension/Flickernaut/registry.py:160
 msgid "Open With..."
 msgstr "Buka Dengan..."
 
-#: src/prefs/applicationList.ts:55
+#: src/prefs/applicationList.ts:65
+msgid "Pin in main menu when submenu is enabled."
+msgstr ""
+
+#: src/prefs/applicationList.ts:80
 msgid "Name cannot be empty"
 msgstr "Nama tidak boleh kosong"
 
-#: src/prefs/applicationList.ts:57
+#: src/prefs/applicationList.ts:82
 msgid "Name already exists"
 msgstr "Nama sudah ada"
-
-#: src/prefs/applicationList.ts:79
-msgid "Native command already exists"
-msgstr "Perintah bawaan sudah ada"
-
-#: src/prefs/applicationList.ts:99
-msgid "Flatpak ID already exists"
-msgstr "ID Flatpak sudah ada"
 
 #: src/ui/widgets/banner.ts:26
 msgid "Restart Nautilus to apply changes."
@@ -116,6 +124,27 @@ msgstr ""
 #: src/ui/widgets/banner.ts:28
 msgid "Nautilus will be closed and restarted after clicking this button."
 msgstr ""
+
+#~ msgid "Native Cmd"
+#~ msgstr "Perintah Bawaan"
+
+#~ msgid "Flatpak ID"
+#~ msgstr "ID Flatpak"
+
+#~ msgid "Arguments"
+#~ msgstr "Argumen"
+
+#~ msgid "Supports Files"
+#~ msgstr "Mendukung File"
+
+#~ msgid "Unknown"
+#~ msgstr "Tidak Diketahui"
+
+#~ msgid "Native command already exists"
+#~ msgstr "Perintah bawaan sudah ada"
+
+#~ msgid "Flatpak ID already exists"
+#~ msgstr "ID Flatpak sudah ada"
 
 #~ msgid "Needs to Restart Nautilus"
 #~ msgstr "Perlu Jalankan Ulang Nautilus"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-20 10:00+0700\n"
+"POT-Creation-Date: 2025-05-26 16:17+0700\n"
 "PO-Revision-Date: 2025-05-15 00:08+0000\n"
 "Last-Translator: Anonymous <noreply@weblate.org>\n"
 "Language-Team: French <https://hosted.weblate.org/projects/flickernaut/"
@@ -27,6 +27,10 @@ msgstr ""
 msgid ""
 "Applications listed here will appear in the Nautilus context menu.\n"
 "You can Enable/Disable using the toggle switch."
+msgstr ""
+
+#: src/ui/pages/application.ui:28
+msgid "Add"
 msgstr ""
 
 #: src/ui/pages/general.ui:12
@@ -50,57 +54,61 @@ msgid "Name"
 msgstr ""
 
 #: src/ui/widgets/application-list.ui:17
-msgid "Native Cmd"
+msgid "Multiple Files"
 msgstr ""
 
-#: src/ui/widgets/application-list.ui:22
-msgid "Flatpak ID"
+#: src/ui/widgets/application-list.ui:18
+msgid "Enable if the app supports opening several files."
 msgstr ""
 
-#: src/ui/widgets/application-list.ui:27
-msgid "Arguments"
+#: src/ui/widgets/application-list.ui:23
+msgid "Multiple Folders"
 msgstr ""
 
-#: src/ui/widgets/application-list.ui:32
-msgid "Supports Files"
+#: src/ui/widgets/application-list.ui:24
+msgid "Enable if the app supports opening several folders."
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:31
-msgid "Unknown"
+#: src/ui/widgets/application-list.ui:29
+msgid "Mime Types"
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:184
+#: src/ui/widgets/application-list.ui:42
+msgid "Remove"
+msgstr ""
+
+#: src/ui/widgets/menu.ui:12
+msgid "Project Page"
+msgstr ""
+
+#: nautilus-extension/Flickernaut/registry.py:61
 #, python-format
 msgid "Open with %s"
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:186
+#: nautilus-extension/Flickernaut/registry.py:63
 #, python-format
 msgid "Open in %s"
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:209
+#: nautilus-extension/Flickernaut/registry.py:160
 msgid "Open In..."
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:209
+#: nautilus-extension/Flickernaut/registry.py:160
 msgid "Open With..."
 msgstr ""
 
-#: src/prefs/applicationList.ts:55
+#: src/prefs/applicationList.ts:65
+msgid "Pin in main menu when submenu is enabled."
+msgstr ""
+
+#: src/prefs/applicationList.ts:80
 msgid "Name cannot be empty"
 msgstr ""
 
-#: src/prefs/applicationList.ts:57
+#: src/prefs/applicationList.ts:82
 msgid "Name already exists"
-msgstr ""
-
-#: src/prefs/applicationList.ts:79
-msgid "Native command already exists"
-msgstr ""
-
-#: src/prefs/applicationList.ts:99
-msgid "Flatpak ID already exists"
 msgstr ""
 
 #: src/ui/widgets/banner.ts:26
