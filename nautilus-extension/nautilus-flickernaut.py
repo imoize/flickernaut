@@ -47,7 +47,10 @@ class FlickernautExtension(GObject.Object, Nautilus.MenuProvider):
         selection_count: int = 1,
     ) -> list[Nautilus.MenuItem]:
         """Generate menu items for the given file(s) or folder(s)."""
-        paths = [f.get_location().get_path() for f in file_info_or_list]
+        # paths = [f.get_location().get_path() for f in file_info_or_list]
+
+        # experimental: use get_uri()
+        paths = [f.get_uri() for f in file_info_or_list]
 
         return applications_registry.get_menu_items(
             paths,
@@ -81,7 +84,10 @@ class FlickernautExtension(GObject.Object, Nautilus.MenuProvider):
 
         if selection_count == 1:
             target = selected_files[0]
-            path = target.get_location().get_path()
+            # path = target.get_location().get_path()
+
+            # experimental: use get_uri()
+            path = target.get_uri()
 
             if target.is_directory():
                 logger.info(f"Single folder selected: {path}")
@@ -91,15 +97,20 @@ class FlickernautExtension(GObject.Object, Nautilus.MenuProvider):
                 )
             else:
                 logger.info(f"Single file selected: {path}")
-
                 return self._get_items(
                     [target], id_prefix="selected", is_file=True, selection_count=1
                 )
         else:
             # Multi-select: determine if all are files or all are directories
-            types_and_paths = [
-                (f.is_directory(), f.get_location().get_path()) for f in selected_files
-            ]
+            # types_and_paths = [
+            #     (f.is_directory(), f.get_location().get_path()) for f in selected_files
+            # ]
+            # types, paths = zip(*types_and_paths)
+            # multiple_dirs = all(types)
+            # multiple_files = not any(types)
+
+            # experimental : use get_uri()
+            types_and_paths = [(f.is_directory(), f.get_uri()) for f in selected_files]
             types, paths = zip(*types_and_paths)
             multiple_dirs = all(types)
             multiple_files = not any(types)

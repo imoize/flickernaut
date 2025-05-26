@@ -4,7 +4,8 @@ from functools import lru_cache
 from typing import Any, Optional
 from gi.repository import Gio, GLib  # type: ignore
 from .logger import get_logger
-from .models import Application, ApplicationsRegistry, AppJsonStruct
+from .models import Application, AppJsonStruct
+from .registry import ApplicationsRegistry
 
 logger = get_logger(__name__)
 
