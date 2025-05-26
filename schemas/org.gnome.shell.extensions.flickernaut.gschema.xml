@@ -18,41 +18,7 @@
     <key name="applications" type="as">
       <summary>List of applications.</summary>
       <description>List of applications to be shown in the menu.</description>
-      <default>[
-        '{
-        "id": "WK6ZbvHFJVGV",
-        "appId": "code.desktop",
-        "name": "VS Code",
-        "icon": "vscode",
-        "pinned": false,
-        "multipleFiles": false,
-        "multipleFolders": false,
-        "mimeTypes": ["application/x-code-workspace"],
-        "enable": false
-        }',
-        '{
-        "id": "diEAs4v3mWE4",
-        "appId": "com.vscodium.codium.desktop",
-        "name": "VSCodium",
-        "icon": "com.vscodium.codium",
-        "pinned": false,
-        "multipleFiles": false,
-        "multipleFolders": false,
-        "mimeTypes": ["text/plain", "inode/directory", "application/x-codium-workspace"],
-        "enable": false
-        }',
-        '{
-        "id": "K0alMDhM6BTJ",
-        "appId": "dev.zed.Zed.desktop",
-        "name": "Zed Editor",
-        "icon": "zed-stable",
-        "pinned": false,
-        "multipleFiles": false,
-        "multipleFolders": false,
-        "mimeTypes": ["text/plain", "application/x-zerosize", "x-scheme-handler/zed"],
-        "enable": false
-        }'
-        ]</default>
+      <default>[ ]</default>
     </key>
 
     <!-- Deprecated and will be removed in the future. Use 'applications' instead. -->
