@@ -13,23 +13,35 @@ corresponding .blp file and regenerate this file with blueprint-compiler.
       </object>
     </child>
     <child>
-      <object class="AdwEntryRow" id="native">
-        <property name="title" translatable="yes">Native Cmd</property>
+      <object class="AdwSwitchRow" id="multiple_files">
+        <property name="title" translatable="yes">Multiple Files</property>
+        <property name="subtitle" translatable="yes">Enable if the app supports opening several files.</property>
       </object>
     </child>
     <child>
-      <object class="AdwEntryRow" id="flatpak">
-        <property name="title" translatable="yes">Flatpak ID</property>
+      <object class="AdwSwitchRow" id="multiple_folders">
+        <property name="title" translatable="yes">Multiple Folders</property>
+        <property name="subtitle" translatable="yes">Enable if the app supports opening several folders.</property>
       </object>
     </child>
     <child>
-      <object class="AdwEntryRow" id="arguments">
-        <property name="title" translatable="yes">Arguments</property>
+      <object class="AdwEntryRow" id="mime_types">
+        <property name="title" translatable="yes">Mime Types</property>
+        <property name="sensitive">false</property>
       </object>
     </child>
     <child>
-      <object class="AdwSwitchRow" id="supports_files">
-        <property name="title" translatable="yes">Supports Files</property>
+      <object class="AdwWrapBox">
+        <property name="align">1</property>
+        <property name="margin-top">6</property>
+        <property name="margin-end">6</property>
+        <property name="margin-bottom">6</property>
+        <child>
+          <object class="GtkButton" id="remove_app_button">
+            <property name="css-classes">error</property>
+            <property name="label" translatable="yes">Remove</property>
+          </object>
+        </child>
       </object>
     </child>
   </template>

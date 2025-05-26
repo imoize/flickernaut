@@ -8,214 +8,122 @@ https://github.com/realmazharhussain/nautilus-code/blob/main/NautilusCode/types.
 
 import os
 from gettext import gettext as _
-from typing import Optional
-from gi.repository import Nautilus, GLib
+from typing import Optional, TypedDict
+from gi.repository import GLib, Gio  # type: ignore
+from .logger import get_logger
+from .launcher import Launcher
+
+logger = get_logger(__name__)
 
 
-class ProgramDict(dict):
-    def __iter__(self):
-        # Override to iterate over values (Program instances)
-        return iter(self.values())
-
-    @property
-    def names(self) -> list[str]:
-        return list(self.keys())
+class AppJsonStruct(TypedDict):
+    id: str
+    app_id: str
+    name: str
+    pinned: bool
+    multiple_files: bool
+    multiple_folders: bool
+    enable: bool
 
 
 class Package:
-    def __str__(self) -> str:
-        return f"{self.type_name}:\n  installed = {self.is_installed}"
+    """Handles app installation checking."""
 
-    @property
-    def type_name(self) -> str:
-        return _("Unknown")
-
-    @property
-    def type_name_raw(self) -> str:
-        return self.__class__.__name__
-
-    @property
-    def run_command(self) -> tuple[str, ...]:
-        raise NotImplementedError
+    def __init__(self, app_id: str):
+        self.app_id = app_id
+        self.app_info = Gio.DesktopAppInfo.new(app_id) if app_id else None
+        self._is_installed_cache = None
 
     @property
     def is_installed(self) -> bool:
-        raise NotImplementedError
+        if self._is_installed_cache is not None:
+            return self._is_installed_cache
 
-
-class Native(Package):
-    def __init__(self, *commands: str) -> None:
-        self.commands: tuple[str, ...] = commands
-        self.cmd_path: str = ""
-        self.desktop_id: Optional[str] = None
-
-        for cmd in commands:
-            if cmd_path := GLib.find_program_in_path(cmd):
-                self.cmd_path = cmd_path
-                self.desktop_id = self._find_desktop_id(cmd)
-                break
-
-    def _find_desktop_id(self, command_name: str) -> Optional[str]:
-        search_dirs: list[str] = [
-            os.path.join(GLib.get_user_data_dir(), "applications"),
-            *[os.path.join(d, "applications") for d in GLib.get_system_data_dirs()],
-        ]
-
-        for dir_path in search_dirs:
-            try:
-                for file in os.listdir(dir_path):
-                    if file.endswith(".desktop"):
-                        basename = file[:-8]
-                        if "-url-handler" in basename and basename.startswith(
-                            command_name
-                        ):
-                            return command_name
-                        elif command_name in basename:
-                            return basename
-            except FileNotFoundError:
-                continue
-        return None
-
-    @property
-    def run_command(self) -> tuple[str, ...]:
-        if self.desktop_id:
-            launcher = GLib.find_program_in_path("gtk-launch") or "/usr/bin/gtk-launch"
-            return (launcher, self.desktop_id)
-        return (self.cmd_path,) if self.cmd_path else ()
-
-    @property
-    def is_installed(self) -> bool:
-        return bool(self.cmd_path)
-
-    @property
-    def type_name(self) -> str:
-        return ""
-
-
-class Flatpak(Package):
-    _flatpak_path = GLib.find_program_in_path("flatpak") or ""
-
-    def __init__(self, app_id: str) -> None:
-        self.app_id: str = app_id
-
-    @classmethod
-    def _get_bin_dirs(cls) -> list[str]:
-        dirs = [
-            os.path.join(GLib.get_user_data_dir(), "flatpak/exports/bin"),
-            "/var/lib/flatpak/exports/bin",
-        ]
-        return [d for d in dirs if os.path.isdir(d)]
-
-    @property
-    def run_command(self) -> tuple[str, ...]:
-        return (self._flatpak_path, "run", self.app_id)
-
-    @property
-    def is_installed(self) -> bool:
-        if not self._flatpak_path or not self.app_id.strip():
+        if not self.app_info:
+            self._is_installed_cache = False
             return False
-        return any(
-            os.path.exists(os.path.join(bin_dir, self.app_id))
-            for bin_dir in self._get_bin_dirs()
-        )
 
-    @property
-    def type_name(self) -> str:
-        return "Flatpak"
+        exec = self.app_info.get_executable() or ""
+        package_type = os.path.basename(exec) if exec else ""
+
+        if package_type == "flatpak":
+            logger.debug("package type: flatpak")
+
+            flatpak_dirs = [
+                os.path.join(GLib.get_user_data_dir(), "flatpak/exports/bin"),
+                "/var/lib/flatpak/exports/bin",
+            ]
+
+            bin_name = self.app_id[:-8]
+            for bin_dir in flatpak_dirs:
+                if os.path.exists(os.path.join(bin_dir, bin_name)):
+                    self._is_installed_cache = True
+                    return True
+            self._is_installed_cache = False
+            return False
+
+        elif package_type.endswith(".appimage"):
+            logger.debug("package type: appimage")
+
+            if exec and exec.endswith(".appimage"):
+                if os.path.exists(exec) and os.access(exec, os.X_OK):
+                    self._is_installed_cache = True
+                    return True
+            self._is_installed_cache = False
+            return False
+
+        elif exec:
+            logger.debug("package type: native")
+
+            if os.path.isabs(exec):
+                if os.path.exists(exec) and os.access(exec, os.X_OK):
+                    self._is_installed_cache = True
+                    return True
+            else:
+                bin_path = GLib.find_program_in_path(exec)
+                if (
+                    bin_path
+                    and os.path.exists(bin_path)
+                    and os.access(bin_path, os.X_OK)
+                ):
+                    self._is_installed_cache = True
+                    return True
+            self._is_installed_cache = False
+            return False
+
+        self._is_installed_cache = False
+        return False
 
 
-class Program:
+class Application:
+    """Represents an application entry configured in Flickernaut."""
+
     def __init__(
         self,
-        id: int,
+        id: str,
+        app_id: str,
         name: str,
-        *packages: Package,
-        arguments: Optional[list[str]] = None,
-        supports_files: bool = False,
+        pinned: bool = False,
+        multiple_files: bool = False,
+        multiple_folders: bool = False,
     ) -> None:
-        self.id: int = id
+        self.id: str = id
+        self.app_id: str = app_id
         self.name: str = name
-        self.arguments: list[str] = arguments or []
-        self.supports_files: bool = supports_files
-        self._packages: ProgramDict = ProgramDict()
+        self.pinned: bool = pinned
+        self.multiple_files: bool = multiple_files
+        self.multiple_folders: bool = multiple_folders
+        self.package = Package(app_id)
+        self.launcher: Optional[Launcher] = None
+        if self.package.is_installed:
+            logger.debug(f"installed: {self.package.is_installed}")
+            app_info = self.package.app_info
+            try:
+                self.launcher = Launcher(app_info, app_id, name) if app_info else None
+            except Exception as e:
+                logger.error(f"Failed to initialize launcher for {app_id}: {e}")
 
-        for pkg in packages:
-            self._packages[pkg.type_name_raw] = pkg
-
-    @property
-    def packages(self) -> ProgramDict:
-        return self._packages
-
-    @property
-    def installed_packages(self) -> list[Package]:
-        return [pkg for pkg in self._packages.values() if pkg.is_installed]
-
-
-class ProgramRegistry(ProgramDict):
-    @staticmethod
-    def _activate_item(item: Nautilus.MenuItem, command: list[str]) -> None:
-        pid, *_ = GLib.spawn_async(command)
-        GLib.spawn_close_pid(pid)
-
-    def get_menu_items(
-        self,
-        path: str,
-        *,
-        id_prefix: str = "",
-        is_file: bool = False,
-        use_submenu: bool = False,
-    ) -> list[Nautilus.MenuItem]:
-
-        items: list[Nautilus.MenuItem] = []
-
-        for program in self:
-            if is_file and not program.supports_files:
-                continue
-
-            installed = program.installed_packages
-
-            for pkg in installed:
-                if not pkg.is_installed:
-                    continue
-
-                show_type = len(installed) > 1 and pkg.type_name
-
-                if is_file:
-                    label = _("Open with %s") % program.name
-                else:
-                    label = _("Open in %s") % program.name
-
-                if show_type:
-                    label += f" ({pkg.type_name})"
-
-                item = Nautilus.MenuItem.new(
-                    name=f"{id_prefix}program-{program.id}", label=label
-                )
-
-                item.connect(
-                    "activate",
-                    self._activate_item,
-                    [*pkg.run_command, *program.arguments, path],
-                )
-
-                items.append(item)
-
-        if use_submenu and items:
-            submenu = Nautilus.Menu()
-
-            for item in items:
-                submenu.append_item(item)
-
-            label = _("Open In...") if not is_file else _("Open With...")
-
-            submenu_item = Nautilus.MenuItem.new(id_prefix + "submenu", label)
-
-            submenu_item.set_submenu(submenu)
-
-            return [submenu_item]
-
-        return items
-
-    def __iadd__(self, program: Program) -> "ProgramRegistry":
-        self[program.id] = program
-        return self
+    def installed_packages(self) -> list[Launcher]:
+        # Deprecated: installed_packages property is kept for compatibility
+        # but should not be used for is_installed checking.
+        return [self.launcher] if self.launcher else []

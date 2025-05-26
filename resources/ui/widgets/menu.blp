@@ -1,0 +1,24 @@
+using Gtk 4.0;
+using Adw 1;
+translation-domain "flickernaut@imoize.github.io";
+
+menu info_menu_model {
+  section {
+    item {
+      label: _("Project Page");
+      action: "prefs.open-github";
+    }
+
+    item {
+      label: "Ko-fi";
+      action: "prefs.donate-kofi";
+    }
+  }
+}
+
+MenuButton info_menu {
+  menu-model: info_menu_model;
+  icon-name: "emote-love-symbolic";
+}
+
+Adw.PreferencesPage menu_util {}

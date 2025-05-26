@@ -1,183 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
 <schemalist>
   <schema id="org.gnome.shell.extensions.flickernaut" path="/org/gnome/shell/extensions/flickernaut/">
-    <key name="settings-version" type="i">
+
+    <!-- Settings for tracking the version of the settings to update from. -->
+    <key name="settings-version" type="u">
       <summary>The version of the settings to update from.</summary>
       <default>1</default>
     </key>
+
+    <!-- Behavior -->
     <key name="submenu" type="b">
       <summary>Group entry in submenu.</summary>
       <default>false</default>
     </key>
+
+    <!-- Apps -->
+    <key name="applications" type="as">
+      <summary>List of applications.</summary>
+      <description>List of applications to be shown in the menu.</description>
+      <default>[ ]</default>
+    </key>
+
+    <!-- Deprecated and will be removed in the future. Use 'applications' instead. -->
     <key name="editors" type="as">
-      <summary>Editor App</summary>
-      <description>Editor App</description>
-      <default>
-        [
-        '{
-        "id": 1,
-        "name": "Android Studio",
-        "native": ["studio"],
-        "flatpak": ["com.google.AndroidStudio"],
-        "arguments": [],
-        "supports_files": false,
-        "enable": false
-        }',
-        '{
-        "id": 2,
-        "name": "CLion",
-        "native": ["clion"],
-        "flatpak": ["com.jetbrains.CLion"],
-        "arguments": [],
-        "supports_files": false,
-        "enable": false
-        }',
-        '{
-        "id": 3,
-        "name": "CLion (EAP)",
-        "native": ["clion-eap"],
-        "flatpak": [],
-        "arguments": [],
-        "supports_files": false,
-        "enable": false
-        }',
-        '{
-        "id": 4,
-        "name": "Goland",
-        "native": ["goland"],
-        "flatpak": ["com.jetbrains.GoLand"],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 5,
-        "name": "Goland (EAP)",
-        "native": ["goland-eap"],
-        "flatpak": [],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 6,
-        "name": "IntelliJ IDEA",
-        "native": ["idea"],
-        "flatpak": [],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 7,
-        "name": "IntelliJ IDEA (EAP)",
-        "native": ["idea-eap"],
-        "flatpak": [],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 8,
-        "name": "IntelliJ IDEA CE",
-        "native": [],
-        "flatpak": ["com.jetbrains.IntelliJ-IDEA-Community"],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 9,
-        "name": "IntelliJ IDEA Ultimate",
-        "native": [],
-        "flatpak": ["com.jetbrains.IntelliJ-IDEA-Ultimate"],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 10,
-        "name": "RustRover",
-        "native": ["rustrover"],
-        "flatpak": [],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 11,
-        "name": "Sublime",
-        "native": ["subl"],
-        "flatpak": ["com.sublimetext.three"],
-        "arguments": [],
-        "supports_files": false,
-        "enable": false
-        }',
-        '{
-        "id": 12,
-        "name": "VSCode",
-        "native": ["code"],
-        "flatpak": ["com.visualstudio.code"],
-        "arguments": [],
-        "supports_files": true,
-        "enable": true
-        }',
-        '{
-        "id": 13,
-        "name": "VSCode (Insiders)",
-        "native": ["code-insiders"],
-        "flatpak": ["com.visualstudio.code.insiders"],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 14,
-        "name": "VSCodium",
-        "native": ["vscodium", "codium"],
-        "flatpak": ["com.vscodium.codium"],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 15,
-        "name": "Webstorm",
-        "native": ["webstorm"],
-        "flatpak": ["com.jetbrains.WebStorm"],
-        "arguments": [],
-        "supports_files": true,
-        "enable": true
-        }',
-        '{
-        "id": 16,
-        "name": "Webstorm (EAP)",
-        "native": ["webstorm-eap"],
-        "flatpak": [],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 17,
-        "name": "Windsurf",
-        "native": ["windsurf"],
-        "flatpak": [],
-        "arguments": [],
-        "supports_files": true,
-        "enable": false
-        }',
-        '{
-        "id": 18,
-        "name": "Zed",
-        "native": ["zed"],
-        "flatpak": ["dev.zed.Zed"],
-        "arguments": [],
-        "supports_files": true,
-        "enable": true
-        }'
-        ]
-      </default>
+      <summary>Editor App (DEPRECATED)</summary>
+      <default>[ ]</default>
     </key>
   </schema>
 </schemalist>
