@@ -13,5 +13,14 @@ template $Application: Adw.PreferencesPage {
     title: _("Apps");
     description: _("Applications listed here will appear in the Nautilus context menu.\nYou can Enable/Disable using the toggle switch.");
     separate-rows: true;
+
+    header-suffix: Gtk.Button add_app_button {
+      valign: center;
+
+      child: Adw.ButtonContent {
+        icon-name: "list-add-symbolic";
+        label: _("Add");
+      };
+    };
   }
 }

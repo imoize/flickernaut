@@ -7,7 +7,7 @@ UI_FILES := $(patsubst resources/ui/%.blp,src/ui/%.ui,$(BLP_FILES))
 UI_SRC := $(shell find src/ui -name '*.ui')
 UI_DST := $(patsubst src/ui/%,dist/ui/%,$(UI_SRC))
 
-.PHONY: all build build-ui pot pot-merge mo pack install test test-shell remove clean
+.PHONY: all build build-ui pot pot-merge mo pack install test test-py test-shell remove clean
 
 all: pack
 
@@ -73,6 +73,7 @@ pack: build schemas/gschemas.compiled copy-ui mo
 	@cp metadata.json dist/
 	@cp -r schemas dist/
 	@cp -r nautilus-extension/* dist/
+	@cp -r resources/ui/icons dist/ui/
 	@(cd dist && zip ../$(UUID).shell-extension.zip -9r .)
 
 install: pack
@@ -82,6 +83,11 @@ test: pack
 	@rm -rf $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 	@cp -r dist $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 	gnome-extensions prefs $(UUID)
+
+test-py:
+	@rm -rf $(HOME)/.local/share/gnome-shell/extensions/$(UUID)/Flickernaut
+	@rm -rf $(HOME)/.local/share/gnome-shell/extensions/$(UUID)/nautilus-flickernaut.py
+	@cp -r nautilus-extension/* $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 
 test-shell:
 	@env GNOME_SHELL_SLOWDOWN_FACTOR=2 \

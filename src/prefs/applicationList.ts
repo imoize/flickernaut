@@ -1,3 +1,4 @@
+import type Gio from 'gi://Gio';
 import type { Application } from '../../@types/types.js';
 import type { BannerHandler } from '../ui/widgets/banner.js';
 import Adw from 'gi://Adw';
@@ -6,38 +7,51 @@ import GObject from 'gi://GObject';
 import Gtk from 'gi://Gtk';
 import { gettext as _ } from 'resource:///org/gnome/Shell/Extensions/js/extensions/prefs.js';
 import { normalizeArray, normalizeArrayOutput, normalizeText } from '../lib/prefs/normalize.js';
-import { setAppSettings, settings } from '../lib/prefs/settings.js';
+import { setAppSettings } from '../lib/prefs/settings.js';
 import { validate } from '../lib/prefs/validation.js';
 import { ToggleSwitchClass } from '../ui/widgets/switch.js';
 
 export class ApplicationListClass extends Adw.ExpanderRow {
-    private declare _id: number;
+    private declare _id: string;
+    private declare _app_Id: string;
     private declare _name: Adw.EntryRow;
-    private declare _native: Adw.EntryRow;
-    private declare _flatpak: Adw.EntryRow;
-    private declare _arguments: Adw.EntryRow;
-    private declare _supports_files: Adw.SwitchRow;
+    private declare _icon: string;
+    private declare _pinned: boolean;
+    private declare _multiple_files: Adw.SwitchRow;
+    private declare _multiple_folders: Adw.SwitchRow;
+    private declare _packageType: 'Flatpak' | 'AppImage' | 'Native';
+    private declare _mime_types: Adw.EntryRow;
+    private declare _pin_button: Gtk.Button;
     private declare _toggleSwitch: ToggleSwitchClass;
+    private declare _remove_app_button: Gtk.Button;
     private declare _bannerHandler: BannerHandler;
 
-    constructor(application: Application, bannerHandler: BannerHandler) {
+    constructor(settings: Gio.Settings, application: Application, bannerHandler: BannerHandler) {
         super();
 
         this._bannerHandler = bannerHandler;
 
         this.title = application.name;
 
+        this.subtitle = application.appId.replace('.desktop', '');
+
         this._id = application.id;
+
+        this._app_Id = application.appId;
 
         this._name.text = normalizeText(application.name);
 
-        this._native.text = normalizeArrayOutput(application.native);
+        this._icon = application.icon;
 
-        this._flatpak.text = normalizeArrayOutput(application.flatpak);
+        this._pinned = application.pinned || false;
 
-        this._arguments.text = normalizeArrayOutput(application.arguments);
+        this._multiple_files.active = application.multipleFiles || false;
 
-        this._supports_files.active = application.supports_files || false;
+        this._multiple_folders.active = application.multipleFolders || false;
+
+        this._packageType = application.packageType || 'Native';
+
+        this._mime_types.text = normalizeArrayOutput(application.mimeTypes);
 
         this._toggleSwitch = new ToggleSwitchClass({
             active: application.enable,
@@ -46,8 +60,18 @@ export class ApplicationListClass extends Adw.ExpanderRow {
 
         this.add_suffix(this._toggleSwitch);
 
+        this._pin_button = new Gtk.Button({
+            valign: Gtk.Align.CENTER,
+            css_classes: ['flat'],
+            icon_name: 'view-non-pin-symbolic',
+            visible: settings.get_boolean('submenu'),
+            tooltip_text: _('Pin in main menu when submenu is enabled.'),
+        });
+
+        this.add_suffix(this._pin_button);
+
         this._name.connect('changed', () => {
-            if (settings && typeof application.id === 'number') {
+            if (settings && typeof application.id === 'string') {
                 const input = this._name;
                 const val = input.text;
                 const result = validate(val, application.id, 'name');
@@ -67,71 +91,63 @@ export class ApplicationListClass extends Adw.ExpanderRow {
                 input.remove_css_class('error');
                 input.set_tooltip_text(null);
 
-                this._updateConfig();
+                this._updateAppSetting();
             }
         });
 
-        this._native.connect('changed', () => {
-            if (settings && typeof application.id === 'number') {
-                const input = this._native;
-                const val = input.text;
-                const result = validate(val, application.id, 'native');
-
-                if (result.isDuplicate) {
-                    input.add_css_class('error');
-                    input.set_tooltip_text(
-                        _('Native command already exists'),
-                    );
-                    return;
-                }
-
-                input.remove_css_class('error');
-                input.set_tooltip_text(null);
-            }
-            this._updateConfig();
+        this._multiple_files.connect('notify::active', () => {
+            this._updateAppSetting();
         });
 
-        this._flatpak.connect('changed', () => {
-            if (settings && typeof application.id === 'number') {
-                const input = this._flatpak;
-                const val = input.text;
-                const result = validate(val, application.id, 'flatpak');
-
-                if (result.isDuplicate) {
-                    input.add_css_class('error');
-                    input.set_tooltip_text(
-                        _('Flatpak ID already exists'),
-                    );
-                    return;
-                }
-
-                input.remove_css_class('error');
-                input.set_tooltip_text(null);
-            }
-            this._updateConfig();
+        this._multiple_folders.connect('notify::active', () => {
+            this._updateAppSetting();
         });
 
-        this._arguments.connect('changed', () => {
-            this._updateConfig();
-        });
-
-        this._supports_files.connect('notify::active', () => {
-            this._updateConfig();
+        this._mime_types.connect('changed', () => {
+            this._updateAppSetting();
         });
 
         this._toggleSwitch.connect('notify::active', () => {
-            this._updateConfig();
+            this._updateAppSetting();
+        });
+
+        if (this._pinned) {
+            this._pin_button.icon_name = 'view-pin-symbolic';
+        }
+
+        settings.connect('changed::submenu', () => {
+            const submenuState = settings.get_boolean('submenu');
+            this._pin_button.visible = submenuState;
+        });
+
+        this._pin_button.connect('clicked', () => {
+            this._pinned = !this._pinned;
+
+            if (this._pinned) {
+                this._pin_button.icon_name = 'view-pin-symbolic';
+            }
+            else {
+                this._pin_button.icon_name = 'view-non-pin-symbolic';
+            }
+            this._updateAppSetting();
+        });
+
+        this._remove_app_button.connect('clicked', () => {
+            this.emit('remove-app', application.id);
         });
     }
 
-    private _updateConfig() {
+    private _updateAppSetting() {
         const newAppSettings: Application = {
             id: this._id,
+            appId: this._app_Id,
             name: normalizeText(this._name.text),
-            native: normalizeArray(this._native.text),
-            flatpak: normalizeArray(this._flatpak.text),
-            arguments: normalizeArray(this._arguments.text),
-            supports_files: this._supports_files.active,
+            icon: this._icon,
+            pinned: this._pinned,
+            multipleFiles: this._multiple_files.active,
+            multipleFolders: this._multiple_folders.active,
+            packageType: this._packageType,
+            mimeTypes: normalizeArray(this._mime_types.text),
             enable: this._toggleSwitch.active,
         };
 
@@ -140,8 +156,8 @@ export class ApplicationListClass extends Adw.ExpanderRow {
         try {
             setAppSettings(newAppSettings, this._bannerHandler);
         }
-        catch (error) {
-            console.error('Failed to update application configuration:', error);
+        catch (e) {
+            console.error('Failed to update application configuration:', e);
         }
     }
 }
@@ -156,12 +172,18 @@ export const ApplicationList = GObject.registerClass(
 
         GTypeName: 'ApplicationList',
 
+        Signals: {
+            'remove-app': {
+                param_types: [GObject.TYPE_STRING],
+            },
+        },
+
         InternalChildren: [
             'name',
-            'native',
-            'flatpak',
-            'arguments',
-            'supports_files',
+            'multiple_files',
+            'multiple_folders',
+            'mime_types',
+            'remove_app_button',
         ],
     },
     ApplicationListClass,
