@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-25 06:39+0700\n"
+"POT-Creation-Date: 2025-05-26 16:17+0700\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,29 +79,33 @@ msgstr ""
 msgid "Project Page"
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:286
+#: nautilus-extension/Flickernaut/registry.py:61
 #, python-format
 msgid "Open with %s"
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:288
+#: nautilus-extension/Flickernaut/registry.py:63
 #, python-format
 msgid "Open in %s"
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:370
+#: nautilus-extension/Flickernaut/registry.py:160
 msgid "Open In..."
 msgstr ""
 
-#: nautilus-extension/Flickernaut/models.py:370
+#: nautilus-extension/Flickernaut/registry.py:160
 msgid "Open With..."
 msgstr ""
 
-#: src/prefs/applicationList.ts:67
+#: src/prefs/applicationList.ts:65
+msgid "Pin in main menu when submenu is enabled."
+msgstr ""
+
+#: src/prefs/applicationList.ts:80
 msgid "Name cannot be empty"
 msgstr ""
 
-#: src/prefs/applicationList.ts:69
+#: src/prefs/applicationList.ts:82
 msgid "Name already exists"
 msgstr ""
 
