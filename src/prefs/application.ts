@@ -164,6 +164,18 @@ export const ApplicationPage = GObject.registerClass(
                 if (appInfo && !applications.some(app => app.appId === appInfo.get_id())) {
                     const mimeTypes = Array.from(appInfo.get_supported_types?.() ?? []);
 
+                    let packageType: 'Flatpak' | 'AppImage' | 'Native';
+                    const executable = appInfo.get_executable();
+                    if (executable.endsWith('flatpak')) {
+                        packageType = 'Flatpak';
+                    }
+                    else if (executable.endsWith('.appimage')) {
+                        packageType = 'AppImage';
+                    }
+                    else {
+                        packageType = 'Native';
+                    }
+
                     const app: Application = {
                         id: generateId(),
                         appId: appInfo.get_id() ?? '',
@@ -172,6 +184,7 @@ export const ApplicationPage = GObject.registerClass(
                         pinned: false,
                         multipleFiles: false,
                         multipleFolders: false,
+                        packageType,
                         mimeTypes,
                         enable: true,
                     };

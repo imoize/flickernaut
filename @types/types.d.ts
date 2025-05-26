@@ -12,6 +12,7 @@ export interface Application {
     pinned: boolean;
     multipleFiles: boolean;
     multipleFolders: boolean;
+    packageType: 'Flatpak' | 'AppImage' | 'Native';
     mimeTypes?: string[];
     enable: boolean;
 }
