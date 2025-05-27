@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: flickernaut@imoize.github.io\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-05-15 06:53+0700\n"
-"PO-Revision-Date: 2025-05-15 00:21+0000\n"
+"POT-Creation-Date: 2025-05-26 16:17+0700\n"
+"PO-Revision-Date: 2025-05-20 02:36+0000\n"
 "Last-Translator: Brilliant Nz <imoizee@gmail.com>\n"
 "Language-Team: Indonesian <https://hosted.weblate.org/projects/flickernaut/"
 "flickernaut/id/>\n"
@@ -19,64 +19,138 @@ msgstr ""
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.12-dev\n"
 
-#: src/ui/pages/general.ui:11
+#: src/ui/pages/application.ui:12 src/ui/pages/application.ui:18
+msgid "Apps"
+msgstr "Aplikasi"
+
+#: src/ui/pages/application.ui:19
+msgid ""
+"Applications listed here will appear in the Nautilus context menu.\n"
+"You can Enable/Disable using the toggle switch."
+msgstr ""
+"Aplikasi yang tercantum di sini akan muncul di menu konteks Nautilus.\n"
+"Anda dapat Mengaktifkan/Menonaktifkan menggunakan tombol alih."
+
+#: src/ui/pages/application.ui:28
+msgid "Add"
+msgstr ""
+
+#: src/ui/pages/general.ui:12
 msgid "General"
 msgstr "Umum"
 
-#: src/ui/pages/general.ui:14
-msgid "Needs to Restart Nautilus"
-msgstr "Perlu Jalankan Ulang Nautilus"
+#: src/ui/pages/general.ui:18
+msgid "Behavior"
+msgstr "Perilaku"
 
-#: src/ui/pages/general.ui:19
-msgid "Editor"
-msgstr "Editor"
+#: src/ui/pages/general.ui:21
+msgid "Group In Submenu"
+msgstr "Grup Di Submenu"
 
-#: nautilus-extension/Flickernaut/models.py:31
-msgid "Unknown"
-msgstr "Tidak Diketahui"
+#: src/ui/pages/general.ui:22
+msgid "Whether to group entries in a submenu."
+msgstr "Apakah akan mengelompokkan entri dalam submenu."
 
-#: nautilus-extension/Flickernaut/models.py:175
+#: src/ui/widgets/application-list.ui:12
+msgid "Name"
+msgstr "Nama"
+
+#: src/ui/widgets/application-list.ui:17
+msgid "Multiple Files"
+msgstr ""
+
+#: src/ui/widgets/application-list.ui:18
+msgid "Enable if the app supports opening several files."
+msgstr ""
+
+#: src/ui/widgets/application-list.ui:23
+msgid "Multiple Folders"
+msgstr ""
+
+#: src/ui/widgets/application-list.ui:24
+msgid "Enable if the app supports opening several folders."
+msgstr ""
+
+#: src/ui/widgets/application-list.ui:29
+msgid "Mime Types"
+msgstr ""
+
+#: src/ui/widgets/application-list.ui:42
+msgid "Remove"
+msgstr ""
+
+#: src/ui/widgets/menu.ui:12
+msgid "Project Page"
+msgstr ""
+
+#: nautilus-extension/Flickernaut/registry.py:61
 #, python-format
 msgid "Open with %s"
 msgstr "Buka dengan %s"
 
-#: nautilus-extension/Flickernaut/models.py:177
+#: nautilus-extension/Flickernaut/registry.py:63
 #, python-format
 msgid "Open in %s"
 msgstr "Buka di %s"
 
-#: src/prefs/editors.ts:27
-msgid "Name"
-msgstr "Nama"
+#: nautilus-extension/Flickernaut/registry.py:160
+msgid "Open In..."
+msgstr "Buka Di..."
 
-#: src/prefs/editors.ts:41
+#: nautilus-extension/Flickernaut/registry.py:160
+msgid "Open With..."
+msgstr "Buka Dengan..."
+
+#: src/prefs/applicationList.ts:65
+msgid "Pin in main menu when submenu is enabled."
+msgstr ""
+
+#: src/prefs/applicationList.ts:80
 msgid "Name cannot be empty"
 msgstr "Nama tidak boleh kosong"
 
-#: src/prefs/editors.ts:43
+#: src/prefs/applicationList.ts:82
 msgid "Name already exists"
 msgstr "Nama sudah ada"
 
-#: src/prefs/editors.ts:57
-msgid "Native Cmd"
-msgstr "Perintah Bawaan"
+#: src/ui/widgets/banner.ts:26
+msgid "Restart Nautilus to apply changes."
+msgstr ""
 
-#: src/prefs/editors.ts:70
-msgid "Native command already exists"
-msgstr "Perintah bawaan sudah ada"
+#: src/ui/widgets/banner.ts:27
+msgid "Restart"
+msgstr ""
 
-#: src/prefs/editors.ts:82
-msgid "Flatpak ID"
-msgstr "ID Flatpak"
+#: src/ui/widgets/banner.ts:28
+msgid "Nautilus will be closed and restarted after clicking this button."
+msgstr ""
 
-#: src/prefs/editors.ts:95
-msgid "Flatpak ID already exists"
-msgstr "ID Flatpak sudah ada"
+#~ msgid "Native Cmd"
+#~ msgstr "Perintah Bawaan"
 
-#: src/prefs/editors.ts:107
-msgid "Arguments"
-msgstr "Argumen"
+#~ msgid "Flatpak ID"
+#~ msgstr "ID Flatpak"
 
-#: src/prefs/editors.ts:116
-msgid "Support File"
-msgstr "Mendukung File"
+#~ msgid "Arguments"
+#~ msgstr "Argumen"
+
+#~ msgid "Supports Files"
+#~ msgstr "Mendukung File"
+
+#~ msgid "Unknown"
+#~ msgstr "Tidak Diketahui"
+
+#~ msgid "Native command already exists"
+#~ msgstr "Perintah bawaan sudah ada"
+
+#~ msgid "Flatpak ID already exists"
+#~ msgstr "ID Flatpak sudah ada"
+
+#~ msgid "Needs to Restart Nautilus"
+#~ msgstr "Perlu Jalankan Ulang Nautilus"
+
+#~ msgid "Editor"
+#~ msgstr "Editor"
+
+#~ msgid "Support File"
+#~ msgstr "Mendukung File"
