@@ -27,17 +27,17 @@ A GNOME extension that adds custom entry to Nautilus context menu for your insta
 
 ### Fedora
 ```bash
-sudo dnf install nautilus-python
+sudo dnf install nautilus-python nautilus-extensions
 ```
 
 ### Ubuntu and Debian-based Distributions
 ```bash
-sudo apt install nautilus-python
+sudo apt install python3-nautilus gir1.2-nautilus-3.0
 ```
 
 ### Arch Linux
 ```bash
-sudo pacman -Sy nautilus-python
+sudo pacman -Sy python-nautilus
 ```
 
 > [!NOTE]
