@@ -96,10 +96,11 @@ class Launcher:
     def launch(self, paths: list[str]) -> bool:
         """Launch the application based _launch_method."""
         if self._launch_method == "gio-launch" and self._app_info:
+            uris = [GLib.filename_to_uri(path) for path in paths]
             try:
                 logger.debug(f"Launching {self.name} with gio-launch: {paths}")
                 ctx = None
-                self._app_info.launch_uris_async(paths, ctx)
+                self._app_info.launch_uris_async(uris, ctx)
                 return True
             except Exception as e:
                 logger.error(
